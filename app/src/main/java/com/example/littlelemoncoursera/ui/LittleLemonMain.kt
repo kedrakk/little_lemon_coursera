@@ -1,6 +1,7 @@
 package com.example.littlelemoncoursera.ui
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,14 +9,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
+import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainUIState
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainViewModel
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
@@ -31,10 +35,8 @@ fun LittleLemonMainPage(
 
     if(uiState.littleLemonUser.email.isNotEmpty()){
         startDestination = Routes.HOME.name
-    }else{
-        Log.w("Little_Lemon_Error",startDestination)
-        Log.e("Little_Lemon_Error ","User has not logged in")
     }
+    val context = LocalContext.current
 
     Surface(
         modifier = Modifier
@@ -85,7 +87,19 @@ fun LittleLemonMainPage(
                 )
             }
             composable(Routes.HOME.name) {
-                HomePage()
+                HomePage(
+                    HomeViewModel(),
+                    uiState.littleLemonUser,
+                    onLogout = {
+                        littleLemonMainViewModel.setUserData(LittleLemonUser("","","",""))
+                        Toast.makeText(context,"Logout Success", Toast.LENGTH_SHORT).show()
+                        navController.navigate(Routes.LOGIN.name){
+                            popUpTo(Routes.LOGIN.name){
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
             }
         }
     }
