@@ -35,6 +35,13 @@ fun LittleLemonMainPage() {
                             }
                         }
                     }
+                , onNavigateToLogin = {
+                        navController.navigate(Routes.LOGIN.name){
+                            popUpTo(Routes.REGISTER.name){
+                                inclusive = true
+                            }
+                        }
+                    }
                 )
             }
             composable(Routes.LOGIN.name) {
@@ -42,6 +49,13 @@ fun LittleLemonMainPage() {
                     viewModel = OnboardingViewModel(),
                     onNavigateToHome = {
                         navController.navigate(Routes.HOME.name){
+                            popUpTo(Routes.LOGIN.name){
+                                inclusive = true
+                            }
+                        }
+                    },
+                    onNavigateToRegister = {
+                        navController.navigate(Routes.REGISTER.name){
                             popUpTo(Routes.LOGIN.name){
                                 inclusive = true
                             }

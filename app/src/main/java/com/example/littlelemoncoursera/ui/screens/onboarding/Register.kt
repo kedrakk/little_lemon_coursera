@@ -25,7 +25,7 @@ import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 
 @Composable
-fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit) {
+fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit,onNavigateToLogin: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     var firstNameText by remember {
         mutableStateOf("")
@@ -54,123 +54,133 @@ fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit) {
     val context = LocalContext.current
 
     AuthTemplate {
-        when (uiState.currentStep) {
-            1 -> Column {
-                TextInputField(
-                    label = "First name",
-                    value = firstNameText,
-                    onValueChange = {
-                        firstNameText = it
-                    },
-                    isError = firstNameError.isNotEmpty()
-                )
-                if (firstNameError.isNotEmpty())
-                    Text(
-                        text = "* $firstNameError",
-                        modifier = Modifier.padding(horizontal = 15.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color.Red,
-                            fontSize = 10.sp
-                        )
+        Column {
+            when (uiState.currentStep) {
+                1 -> Column {
+                    TextInputField(
+                        label = "First name",
+                        value = firstNameText,
+                        onValueChange = {
+                            firstNameText = it
+                        },
+                        isError = firstNameError.isNotEmpty()
                     )
-                TextInputField(label = "Last name", value = lastNameText, onValueChange = {
-                    lastNameText = it
-                }, isError = lastNameError.isNotEmpty())
-                if (lastNameError.isNotEmpty())
-                    Text(
-                        text = "* $lastNameError",
-                        modifier = Modifier.padding(horizontal = 15.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color.Red,
-                            fontSize = 10.sp
+                    if (firstNameError.isNotEmpty())
+                        Text(
+                            text = "* $firstNameError",
+                            modifier = Modifier.padding(horizontal = 15.dp),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = Color.Red,
+                                fontSize = 10.sp
+                            )
                         )
+                    TextInputField(label = "Last name", value = lastNameText, onValueChange = {
+                        lastNameText = it
+                    }, isError = lastNameError.isNotEmpty())
+                    if (lastNameError.isNotEmpty())
+                        Text(
+                            text = "* $lastNameError",
+                            modifier = Modifier.padding(horizontal = 15.dp),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = Color.Red,
+                                fontSize = 10.sp
+                            )
+                        )
+                    ActionButton(
+                        onClick = {
+                            firstNameError =
+                                if (viewModel.emptyValidation(firstNameText)) "First Name must be filled" else ""
+                            lastNameError =
+                                if (viewModel.emptyValidation(lastNameText)) "Last Name must be filled" else ""
+                            if (firstNameError.isEmpty() && lastNameError.isEmpty()) {
+                                viewModel.changeIndex(2)
+                            }
+                        },
+                        label = "Continue"
                     )
-                ActionButton(
-                    onClick = {
-                        firstNameError =
-                            if (viewModel.emptyValidation(firstNameText)) "First Name must be filled" else ""
-                        lastNameError =
-                            if (viewModel.emptyValidation(lastNameText)) "Last Name must be filled" else ""
-                        if (firstNameError.isEmpty() && lastNameError.isEmpty()) {
-                            viewModel.changeIndex(2)
-                        }
-                    },
-                    label = "Continue"
-                )
+                }
+
+                2 -> Column(
+                    Modifier
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    TextInputField(label = "Email Address", value = emailText, onValueChange = {
+                        emailText = it
+                    }, isError = emailError.isNotEmpty())
+                    if (emailError.isNotEmpty())
+                        Text(
+                            text = "* $emailError",
+                            modifier = Modifier.padding(horizontal = 15.dp),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = Color.Red,
+                                fontSize = 10.sp
+                            ),
+                            textAlign = TextAlign.Left
+                        )
+                    ActionButton(
+                        onClick = {
+                            emailError =
+                                if (viewModel.emptyValidation(emailText)) "Email must be filled" else if (viewModel.emailValidation(
+                                        emailText
+                                    )
+                                ) "Invalid Email" else ""
+                            if (emailError.isEmpty()) {
+                                viewModel.changeIndex(3)
+                            }
+                        },
+                        label = "Continue"
+                    )
+                    TextButton(onClick = { viewModel.changeIndex(1) }, label = "Back To Previous")
+                }
+
+                else -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    TextInputField(
+                        label = "Password",
+                        value = passwordText,
+                        onValueChange = {
+                            passwordText = it
+                        },
+                        isPassword = true,
+                        passwordVisible = uiState.obscured,
+                        onPasswordVisibilityChanged = { viewModel.changePasswordVisibility() },
+                        isError = passwordError.isNotEmpty()
+                    )
+                    if (passwordError.isNotEmpty())
+                        Text(
+                            text = "* $passwordError",
+                            modifier = Modifier.padding(horizontal = 15.dp),
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                color = Color.Red,
+                                fontSize = 10.sp
+                            )
+                        )
+                    ActionButton(
+                        onClick = {
+                            passwordError =
+                                if (viewModel.emptyValidation(passwordText)) "Password must be filled" else ""
+                            if(passwordError.isEmpty()){
+                                Toast.makeText(
+                                    context,
+                                    "$emailText is created successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                onNavigateToHome()
+                            }
+                        },
+                        label = "Create Account"
+                    )
+                    TextButton(onClick = { viewModel.changeIndex(2) }, label = "Back To Previous")
+                }
             }
 
-            2 -> Column(
-                Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TextInputField(label = "Email Address", value = emailText, onValueChange = {
-                    emailText = it
-                }, isError = emailError.isNotEmpty())
-                if (emailError.isNotEmpty())
-                    Text(
-                        text = "* $emailError",
-                        modifier = Modifier.padding(horizontal = 15.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color.Red,
-                            fontSize = 10.sp
-                        ),
-                        textAlign = TextAlign.Left
-                    )
-                ActionButton(
-                    onClick = {
-                        emailError =
-                            if (viewModel.emptyValidation(emailText)) "Email must be filled" else if (viewModel.emailValidation(
-                                    emailText
-                                )
-                            ) "Invalid Email" else ""
-                        if (emailError.isEmpty()) {
-                            viewModel.changeIndex(3)
-                        }
-                    },
-                    label = "Continue"
-                )
-                TextButton(onClick = { viewModel.changeIndex(1) }, label = "Back To Previous")
-            }
-
-            else -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                TextInputField(
-                    label = "Password",
-                    value = passwordText,
-                    onValueChange = {
-                        passwordText = it
-                    },
-                    isPassword = true,
-                    passwordVisible = uiState.obscured,
-                    onPasswordVisibilityChanged = { viewModel.changePasswordVisibility() },
-                    isError = passwordError.isNotEmpty()
-                )
-                if (passwordError.isNotEmpty())
-                    Text(
-                        text = "* $passwordError",
-                        modifier = Modifier.padding(horizontal = 15.dp),
-                        style = MaterialTheme.typography.bodySmall.copy(
-                            color = Color.Red,
-                            fontSize = 10.sp
-                        )
-                    )
-                ActionButton(
-                    onClick = {
-                        passwordError =
-                            if (viewModel.emptyValidation(passwordText)) "Password must be filled" else ""
-                        if(passwordError.isEmpty()){
-                            Toast.makeText(
-                                context,
-                                "$emailText is created successfully",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            onNavigateToHome()
-                        }
-                    },
-                    label = "Create Account"
-                )
-                TextButton(onClick = { viewModel.changeIndex(2) }, label = "Back To Previous")
-            }
+            TextButton(
+                onClick = {
+                    onNavigateToLogin()
+                },
+                label = "Already have an account? Login",
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
+            )
         }
 
     }

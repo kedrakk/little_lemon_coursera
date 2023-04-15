@@ -1,6 +1,7 @@
 package com.example.littlelemoncoursera.ui.screens.onboarding
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,11 +18,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
+import com.example.littlelemoncoursera.ui.screens.components.TextButton
 import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 
 @Composable
-fun LoginPage(viewModel:OnboardingViewModel,onNavigateToHome:()->Unit) {
+fun LoginPage(
+    viewModel: OnboardingViewModel,
+    onNavigateToHome: () -> Unit,
+    onNavigateToRegister: () -> Unit
+) {
     val uiState by viewModel.uiState.collectAsState()
     var emailText by remember {
         mutableStateOf("")
@@ -80,7 +86,7 @@ fun LoginPage(viewModel:OnboardingViewModel,onNavigateToHome:()->Unit) {
                     ) "Invalid Email" else ""
                 passwordError =
                     if (viewModel.emptyValidation(passwordText)) "Password must be filled" else ""
-                if(emailError.isEmpty()&&passwordError.isEmpty()){
+                if (emailError.isEmpty() && passwordError.isEmpty()) {
                     Toast.makeText(
                         context,
                         "LoggedIn successfully",
@@ -90,6 +96,13 @@ fun LoginPage(viewModel:OnboardingViewModel,onNavigateToHome:()->Unit) {
                 }
             },
             label = "Login"
+        )
+        TextButton(
+            onClick = {
+                onNavigateToRegister()
+            },
+            label = "Don't have an account? Register",
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
         )
     }
 }

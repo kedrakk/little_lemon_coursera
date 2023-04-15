@@ -44,5 +44,6 @@ fun AuthTemplate(content: @Composable (ColumnScope.() -> Unit)) {
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
         )
         content()
+
     }
 }
