@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
+import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 
@@ -23,13 +24,25 @@ fun LittleLemonMainPage() {
             .fillMaxHeight()
     ) {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = Routes.REGISTER.name) {
+        NavHost(navController = navController, startDestination = Routes.LOGIN.name) {
             composable(Routes.REGISTER.name) {
                 RegisterPage(
                     viewModel = OnboardingViewModel(),
                     onNavigateToHome = {
                         navController.navigate(Routes.HOME.name){
                             popUpTo(Routes.REGISTER.name){
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+            composable(Routes.LOGIN.name) {
+                LoginPage(
+                    viewModel = OnboardingViewModel(),
+                    onNavigateToHome = {
+                        navController.navigate(Routes.HOME.name){
+                            popUpTo(Routes.LOGIN.name){
                                 inclusive = true
                             }
                         }

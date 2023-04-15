@@ -54,24 +54,6 @@ fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit) {
     val context = LocalContext.current
 
     AuthTemplate {
-//        LogoImage(size = 90.dp)
-//        Box(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(120.dp)
-//                .background(color = MaterialTheme.colorScheme.primary),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            Text(
-//                text = "Let's get to know you",
-//                style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
-//            )
-//        }
-//        Text(
-//            text = "Personal Information",
-//            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-//            modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
-//        )
         when (uiState.currentStep) {
             1 -> Column {
                 TextInputField(
