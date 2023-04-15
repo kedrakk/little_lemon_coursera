@@ -1,11 +1,8 @@
 package com.example.littlelemoncoursera.ui.screens.onboarding
 
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,12 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
-import com.example.littlelemoncoursera.ui.screens.components.LogoImage
 import com.example.littlelemoncoursera.ui.screens.components.TextButton
 import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
@@ -58,31 +53,25 @@ fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit) {
     }
     val context = LocalContext.current
 
-    Column {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            LogoImage(size = 90.dp)
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-                .background(color = MaterialTheme.colorScheme.primary),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Let's get to know you",
-                style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
-            )
-        }
-        Text(
-            text = "Personal Information",
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
-        )
+    AuthTemplate {
+//        LogoImage(size = 90.dp)
+//        Box(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .height(120.dp)
+//                .background(color = MaterialTheme.colorScheme.primary),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            Text(
+//                text = "Let's get to know you",
+//                style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
+//            )
+//        }
+//        Text(
+//            text = "Personal Information",
+//            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+//            modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
+//        )
         when (uiState.currentStep) {
             1 -> Column {
                 TextInputField(
