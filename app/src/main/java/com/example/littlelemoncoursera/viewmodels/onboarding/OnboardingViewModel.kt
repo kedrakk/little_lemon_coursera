@@ -1,5 +1,6 @@
 package com.example.littlelemoncoursera.viewmodels.onboarding
 
+import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,5 +21,13 @@ class OnboardingViewModel : ViewModel() {
         _uiState.update {
             it.copy(obscured = !_uiState.value.obscured)
         }
+    }
+
+    fun emptyValidation(textValue:String):Boolean{
+        return textValue.isEmpty();
+    }
+
+    fun emailValidation(email:String):Boolean{
+        return !Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

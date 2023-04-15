@@ -44,6 +44,7 @@ fun TextInputField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
+    isError:Boolean,
     isPassword: Boolean = false,
     passwordVisible: Boolean = false,
     onPasswordVisibilityChanged: () -> Unit = {}
@@ -59,6 +60,7 @@ fun TextInputField(
             onValueChange = {
                 onValueChange(it)
             },
+            isError = isError,
             modifier = Modifier
                 .padding(horizontal = 15.dp)
                 .fillMaxWidth(),
