@@ -30,7 +30,7 @@ import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 
 @Composable
-fun RegisterPage(viewModel: OnboardingViewModel) {
+fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit) {
     val uiState by viewModel.uiState.collectAsState()
     var firstNameText by remember {
         mutableStateOf("")
@@ -57,6 +57,7 @@ fun RegisterPage(viewModel: OnboardingViewModel) {
         mutableStateOf("")
     }
     val context = LocalContext.current
+
     Column {
         Box(
             modifier = Modifier
@@ -192,6 +193,7 @@ fun RegisterPage(viewModel: OnboardingViewModel) {
                                 "$emailText is created successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
+                            onNavigateToHome()
                         }
                     },
                     label = "Create Account"

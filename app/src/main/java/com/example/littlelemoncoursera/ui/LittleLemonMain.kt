@@ -6,6 +6,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.littlelemoncoursera.navigation.Routes
+import com.example.littlelemoncoursera.ui.screens.home.HomePage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 
@@ -17,6 +22,25 @@ fun LittleLemonMainPage() {
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        RegisterPage(viewModel = OnboardingViewModel())
+        val navController = rememberNavController()
+        NavHost(navController = navController, startDestination = Routes.REGISTER.name) {
+            composable(Routes.REGISTER.name) {
+                RegisterPage(
+                    viewModel = OnboardingViewModel(),
+                    onNavigateToHome = {
+                        navController.navigate(Routes.HOME.name){
+                            popUpTo(Routes.REGISTER.name){
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+            composable(Routes.HOME.name) {
+                HomePage()
+            }
+        }
     }
+
+
 }
