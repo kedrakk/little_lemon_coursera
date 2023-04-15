@@ -19,13 +19,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.TextButton
 import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 
 @Composable
-fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit,onNavigateToLogin: () -> Unit) {
+fun RegisterPage(
+    viewModel: OnboardingViewModel,
+    onNavigateToHome: (LittleLemonUser) -> Unit,
+    onNavigateToLogin: () -> Unit
+) {
     val uiState by viewModel.uiState.collectAsState()
     var firstNameText by remember {
         mutableStateOf("")
@@ -159,13 +164,20 @@ fun RegisterPage(viewModel: OnboardingViewModel,onNavigateToHome:()->Unit,onNavi
                         onClick = {
                             passwordError =
                                 if (viewModel.emptyValidation(passwordText)) "Password must be filled" else ""
-                            if(passwordError.isEmpty()){
+                            if (passwordError.isEmpty()) {
                                 Toast.makeText(
                                     context,
                                     "$emailText is created successfully",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                onNavigateToHome()
+                                onNavigateToHome(
+                                    LittleLemonUser(
+                                        firstName = firstNameText,
+                                        lastName = lastNameText,
+                                        email = emailText,
+                                        password = passwordText
+                                    )
+                                )
                             }
                         },
                         label = "Create Account"

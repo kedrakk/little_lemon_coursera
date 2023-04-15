@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.TextButton
 import com.example.littlelemoncoursera.ui.screens.components.TextInputField
@@ -25,7 +26,7 @@ import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 @Composable
 fun LoginPage(
     viewModel: OnboardingViewModel,
-    onNavigateToHome: () -> Unit,
+    onNavigateToHome: (LittleLemonUser) -> Unit,
     onNavigateToRegister: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -92,7 +93,14 @@ fun LoginPage(
                         "LoggedIn successfully",
                         Toast.LENGTH_SHORT
                     ).show()
-                    onNavigateToHome()
+                    onNavigateToHome(
+                        LittleLemonUser(
+                            firstName = "Martin",
+                            lastName = "Ødegaard",
+                            email = emailText,
+                            password = passwordText
+                        )
+                    )
                 }
             },
             label = "Login"
