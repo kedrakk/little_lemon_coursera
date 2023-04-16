@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
+import com.example.littlelemoncoursera.ui.screens.home.SplashPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
@@ -28,14 +29,10 @@ import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 fun LittleLemonMainPage(
     littleLemonMainViewModel: LittleLemonMainViewModel = viewModel(
         factory = LittleLemonMainViewModel.Factory
-    )
+    ),
 ) {
     val uiState:LittleLemonMainUIState = littleLemonMainViewModel.uiState.collectAsState().value
-    var startDestination: String = Routes.LOGIN.name
 
-    if(uiState.littleLemonUser.email.isNotEmpty()){
-        startDestination = Routes.HOME.name
-    }
     val context = LocalContext.current
 
     Surface(
@@ -45,7 +42,7 @@ fun LittleLemonMainPage(
             .fillMaxHeight()
     ) {
         val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = startDestination) {
+        NavHost(navController = navController, startDestination = Routes.SPLASH.name) {
             composable(Routes.REGISTER.name) {
                 RegisterPage(
                     viewModel = OnboardingViewModel(),
@@ -95,6 +92,22 @@ fun LittleLemonMainPage(
                         Toast.makeText(context,"Logout Success", Toast.LENGTH_SHORT).show()
                         navController.navigate(Routes.LOGIN.name){
                             popUpTo(Routes.LOGIN.name){
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
+            composable(Routes.SPLASH.name){
+                SplashPage(
+                    onLaunchToRespective = {
+                        val newDestination = if(uiState.littleLemonUser.email.isNotEmpty()){
+                            Routes.HOME.name
+                        }else{
+                            Routes.LOGIN.name
+                        }
+                        navController.navigate(newDestination){
+                            popUpTo(Routes.SPLASH.name){
                                 inclusive = true
                             }
                         }

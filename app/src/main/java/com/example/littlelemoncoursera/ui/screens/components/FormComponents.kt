@@ -32,7 +32,6 @@ import com.example.littlelemoncoursera.R
 
 @Composable
 fun LogoImage(size: Dp) {
-
     Image(
         painter = painterResource(id = R.drawable.logo),
         contentDescription = "Little Lemon Logo",
