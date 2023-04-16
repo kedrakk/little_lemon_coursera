@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.model.LittleLemonUser
@@ -73,10 +72,9 @@ fun UserInformation(littleLemonUser: LittleLemonUser) {
         verticalAlignment = Alignment.CenterVertically
     ) {
        Image(
-           painter = painterResource(id = R.drawable.baseline_account_circle_24),
-           contentDescription = "Profile",
-           modifier = Modifier.size(80.dp),
-           colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+           painter = painterResource(id = R.drawable.profile),
+           contentDescription = littleLemonUser.email,
+           modifier = Modifier.size(80.dp)
        )
         Column(
             modifier = Modifier.padding(horizontal = 10.dp)
@@ -102,7 +100,7 @@ fun SettingItem(iconData:Int, label:String,onTap: () -> Unit) {
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onTap = {onTap()}
+                    onTap = { onTap() }
                 )
             },
         verticalAlignment = Alignment.CenterVertically
@@ -125,20 +123,5 @@ fun SettingItem(iconData:Int, label:String,onTap: () -> Unit) {
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
             modifier = Modifier.size(18.dp)
         )
-    }
-}
-
-@Preview
-@Composable
-fun ProfileContentPreview() {
-    ProfileContent(
-        littleLemonUser = LittleLemonUser(
-            firstName = "Khin",
-            lastName = "EaindraKyaw",
-            email = "kedk@gmail.com",
-            password = "123456"
-        ),
-    ) {
-
     }
 }
