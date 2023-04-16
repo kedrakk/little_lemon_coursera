@@ -1,16 +1,23 @@
 package com.example.littlelemoncoursera.ui.screens.home
 
+import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,8 +25,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.littlelemoncoursera.data.local.HomeBottomBarData
 import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
@@ -27,7 +38,7 @@ import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage( homeViewModel: HomeViewModel, littleLemonUser: LittleLemonUser,onLogout: () -> Unit) {
+fun HomePage(homeViewModel: HomeViewModel, littleLemonUser: LittleLemonUser, onLogout: () -> Unit) {
 
     val homeUIState = homeViewModel.uiState.collectAsState().value
 
@@ -37,7 +48,8 @@ fun HomePage( homeViewModel: HomeViewModel, littleLemonUser: LittleLemonUser,onL
                 homeViewModel.bottomBarItems,
                 onItemClick = {
                     homeViewModel.changeIndex(it)
-                }
+                },
+                activeIndex = homeUIState.selectedIndex
             )
         }
     ) {
@@ -46,12 +58,12 @@ fun HomePage( homeViewModel: HomeViewModel, littleLemonUser: LittleLemonUser,onL
                 .background(Color.White)
                 .padding(paddingValues = it)
         ) {
-            when(homeUIState.selectedIndex){
+            when (homeUIState.selectedIndex) {
                 0 -> HomeContent()
                 1 -> CategoryContent()
                 2 -> CartContent()
                 3 -> ReservationContent()
-                4 -> ProfileContent(littleLemonUser = littleLemonUser,onLogout = {onLogout()})
+                4 -> ProfileContent(littleLemonUser = littleLemonUser, onLogout = { onLogout() })
                 else -> HomeContent()
             }
         }
@@ -62,33 +74,39 @@ fun HomePage( homeViewModel: HomeViewModel, littleLemonUser: LittleLemonUser,onL
 fun HomeBottomBar(
     bottomBarItems: List<HomeBottomBarItems>,
     onItemClick: (Int) -> Unit,
+    activeIndex: Int,
 ) {
-    BottomAppBar(containerColor = Color.Gray) {
+    BottomAppBar(containerColor = MaterialTheme.colorScheme.secondary) {
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            bottomBarItems.map {item->
-                ClickableText(
-                    text = AnnotatedString(item.label),
-                    onClick = {
-                        onItemClick(item.index)
+            bottomBarItems.map { item ->
+                val isActive: Boolean = activeIndex == item.index
+                Button(
+                    onClick = { onItemClick(item.index) },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor =  Color.Transparent,
+                        contentColor = if (isActive) MaterialTheme.colorScheme.onPrimary else Color.Gray
+                    ),
+                    //contentPadding = PaddingValues(0.dp)
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painter = painterResource(id = item.iconData),
+                            contentDescription = item.label
+                        )
+                        if (isActive)
+                            Text(text = item.label, fontSize = 10.sp)
                     }
-                )
+                }
             }
         }
     }
 }
 
-@Composable
-fun HomeContent() {
-    Box(
-        Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Home Content")
-    }
-}
 
 @Composable
 fun CategoryContent() {
@@ -121,7 +139,7 @@ fun ReservationContent() {
 }
 
 @Composable
-fun ProfileContent(littleLemonUser: LittleLemonUser,onLogout: () -> Unit) {
+fun ProfileContent(littleLemonUser: LittleLemonUser, onLogout: () -> Unit) {
     Column() {
         Text(text = "Profile Content")
         Text(text = littleLemonUser.email)
@@ -130,4 +148,16 @@ fun ProfileContent(littleLemonUser: LittleLemonUser,onLogout: () -> Unit) {
             label = "Logout"
         )
     }
+}
+
+@Preview
+@Composable
+fun HomeBottomBarPreview() {
+    HomeBottomBar(
+        HomeBottomBarData.homeBottomBarItems,
+        onItemClick = {
+
+        },
+        activeIndex = 1
+    )
 }

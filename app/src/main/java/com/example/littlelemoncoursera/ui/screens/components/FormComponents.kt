@@ -98,7 +98,7 @@ fun ActionButton(onClick: () -> Unit, label: String) {
 fun TextButton(onClick: () -> Unit, label: String,modifier: Modifier=Modifier) {
     ClickableText(
         text = AnnotatedString(label), onClick = { onClick() },
-        style = TextStyle(textAlign = TextAlign.Center),
+        style = TextStyle(textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.secondary),
         modifier = modifier
     )
 }

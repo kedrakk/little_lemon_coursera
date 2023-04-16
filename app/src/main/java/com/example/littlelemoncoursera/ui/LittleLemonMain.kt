@@ -1,6 +1,5 @@
 package com.example.littlelemoncoursera.ui
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
-import com.example.littlelemoncoursera.ui.screens.home.SplashPage
+import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
