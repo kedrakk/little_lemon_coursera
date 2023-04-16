@@ -18,26 +18,7 @@ import com.example.littlelemoncoursera.ui.screens.components.LogoImage
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashPage(onLaunchToRespective:()->Unit) {
-    val scale = remember {
-        androidx.compose.animation.core.Animatable(0f)
-    }
-
-    // Animation
-    LaunchedEffect(key1 = true) {
-        scale.animateTo(
-            targetValue = 0.7f,
-            // tween Animation
-            animationSpec = tween(
-                durationMillis = 300,
-                easing = {
-                    OvershootInterpolator(4f).getInterpolation(it)
-                }))
-        // Customize the delay time
-        delay(2000L)
-        onLaunchToRespective()
-    }
-
+fun SplashPage() {
     Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.onPrimary), contentAlignment = Alignment.Center) {
         LogoImage(size = 500.dp)
     }

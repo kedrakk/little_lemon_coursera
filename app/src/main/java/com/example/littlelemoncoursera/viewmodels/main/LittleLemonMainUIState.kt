@@ -8,5 +8,6 @@ data class LittleLemonMainUIState(
         "",
         "",
         ""
-    )
+    ),
+    val isLoading: Boolean = true,
 )

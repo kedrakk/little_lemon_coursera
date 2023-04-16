@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.littlelemoncoursera.LittleLemonApplication
 import com.example.littlelemoncoursera.data.UserPreferenceRepository
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -29,11 +30,12 @@ class LittleLemonMainViewModel(private val userPreferenceRepository: UserPrefere
 
     val uiState: StateFlow<LittleLemonMainUIState> =
         userPreferenceRepository.littleLemonUser.map { user ->
-            LittleLemonMainUIState(user)
+            delay(3000L)
+            LittleLemonMainUIState(user, isLoading = false,)
         }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
+                started = SharingStarted.WhileSubscribed(2_000),
                 initialValue = LittleLemonMainUIState()
             )
 
