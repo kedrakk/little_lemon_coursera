@@ -1,19 +1,14 @@
 package com.example.littlelemoncoursera.ui.screens.home
 
-import android.provider.CalendarContract.Colors
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,10 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.littlelemoncoursera.data.local.HomeBottomBarData
 import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
@@ -38,7 +32,12 @@ import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage(homeViewModel: HomeViewModel, littleLemonUser: LittleLemonUser, onLogout: () -> Unit) {
+fun HomePage(
+    homeViewModel: HomeViewModel,
+    littleLemonUser: LittleLemonUser,
+    onLogout: () -> Unit,
+    navController: NavController
+) {
 
     val homeUIState = homeViewModel.uiState.collectAsState().value
 
@@ -55,16 +54,15 @@ fun HomePage(homeViewModel: HomeViewModel, littleLemonUser: LittleLemonUser, onL
     ) {
         Box(
             modifier = Modifier
-                .background(Color.White)
                 .padding(paddingValues = it)
         ) {
             when (homeUIState.selectedIndex) {
-                0 -> HomeContent()
+                0 -> HomeContent(navController = navController)
                 1 -> CategoryContent()
                 2 -> CartContent()
                 3 -> ReservationContent()
                 4 -> ProfileContent(littleLemonUser = littleLemonUser, onLogout = { onLogout() })
-                else -> HomeContent()
+                else -> HomeContent(navController = navController)
             }
         }
     }
@@ -86,7 +84,7 @@ fun HomeBottomBar(
                 Button(
                     onClick = { onItemClick(item.index) },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor =  Color.Transparent,
+                        containerColor = Color.Transparent,
                         contentColor = if (isActive) MaterialTheme.colorScheme.onPrimary else Color.Gray
                     ),
                     //contentPadding = PaddingValues(0.dp)
@@ -106,7 +104,6 @@ fun HomeBottomBar(
         }
     }
 }
-
 
 @Composable
 fun CategoryContent() {

@@ -15,7 +15,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.Routes
+import com.example.littlelemoncoursera.ui.screens.category.SearchItemPage
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
+import com.example.littlelemoncoursera.ui.screens.home.ProfileContent
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
@@ -101,11 +103,15 @@ fun LittleLemonMainPage(
                                 inclusive = true
                             }
                         }
-                    }
+                    },
+                    navController = navController
                 )
             }
             composable(Routes.SPLASH.name) {
                 SplashPage()
+            }
+            composable(Routes.SEARCH.name){
+                SearchItemPage()
             }
         }
     }

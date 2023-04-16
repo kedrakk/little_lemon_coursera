@@ -1,5 +1,5 @@
 package com.example.littlelemoncoursera.navigation
 
 enum class Routes {
-    REGISTER, LOGIN, HOME, SPLASH
+    REGISTER, LOGIN, HOME, SPLASH, SEARCH
 }
