@@ -28,6 +28,7 @@ import com.example.littlelemoncoursera.data.local.HomeBottomBarData
 import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
+import com.example.littlelemoncoursera.ui.screens.profile.ProfileContent
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -132,18 +133,6 @@ fun ReservationContent() {
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Reservation Content")
-    }
-}
-
-@Composable
-fun ProfileContent(littleLemonUser: LittleLemonUser, onLogout: () -> Unit) {
-    Column() {
-        Text(text = "Profile Content")
-        Text(text = littleLemonUser.email)
-        ActionButton(
-            onClick = { onLogout() },
-            label = "Logout"
-        )
     }
 }
 
