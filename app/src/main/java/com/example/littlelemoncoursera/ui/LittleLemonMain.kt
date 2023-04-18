@@ -110,7 +110,7 @@ fun LittleLemonMainPage(
                 SplashPage()
             }
             composable(Routes.SEARCH.name){
-                SearchItemPage()
+                SearchItemPage(navController = navController)
             }
         }
     }

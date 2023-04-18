@@ -14,8 +14,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -39,7 +42,6 @@ fun LogoImage(size: Dp) {
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TextInputField(
     label: String,
@@ -56,6 +58,30 @@ fun TextInputField(
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier.padding(horizontal = 15.dp, vertical = 5.dp)
         )
+        LittleLemonTextBox(
+            value = value,
+            onValueChange = onValueChange,
+            isError = isError,
+            isPassword=isPassword,
+            passwordVisible = passwordVisible,
+            onPasswordVisibilityChanged=onPasswordVisibilityChanged,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LittleLemonTextBox(
+    value: String,
+    onValueChange: (String) -> Unit,
+    isError: Boolean,
+    isPassword: Boolean = false,
+    passwordVisible: Boolean = false,
+    onPasswordVisibilityChanged: () -> Unit = {},
+    isOutline:Boolean = true,
+) {
+    if(isOutline)
+    {
         OutlinedTextField(
             value = value,
             onValueChange = {
@@ -72,6 +98,19 @@ fun TextInputField(
                 }
             },
             visualTransformation = if (isPassword && passwordVisible) PasswordVisualTransformation() else VisualTransformation.None,
+        )
+    }else{
+        TextField(
+            value = value,
+            onValueChange = {
+                onValueChange(it)
+            },
+            modifier = Modifier
+                .padding(horizontal = 15.dp, vertical = 5.dp)
+                .fillMaxWidth(),
+            colors = TextFieldDefaults.textFieldColors(
+                containerColor = Color.Transparent,
+            ),
         )
     }
 }
