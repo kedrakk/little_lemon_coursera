@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -116,12 +117,13 @@ fun LittleLemonTextBox(
 }
 
 @Composable
-fun ActionButton(onClick: () -> Unit, label: String) {
+fun ActionButton(onClick: () -> Unit, label: String,isOutline: Boolean=false,verticalPadding:Int=20) {
     Button(
         onClick = { onClick() }, shape = RoundedCornerShape(10),
         modifier = Modifier
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .fillMaxWidth()
+            .padding(horizontal = 15.dp, vertical = verticalPadding.dp)
+            .fillMaxWidth(),
+        colors = if(isOutline) ButtonDefaults.outlinedButtonColors() else ButtonDefaults.buttonColors()
     ) {
         Text(
             text = label,

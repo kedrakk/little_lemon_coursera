@@ -27,6 +27,7 @@ import com.example.littlelemoncoursera.ui.screens.home.HomePage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
+import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainUIState
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainViewModel
@@ -127,7 +128,7 @@ fun LittleLemonMainPage(
                     }
                 )
             ){
-                it.arguments?.getInt(RouteKeys.dishId)?.let { it1 -> DishDetailPage(dishId = it1, navController = navController) }
+                it.arguments?.getInt(RouteKeys.dishId)?.let { it1 -> DishDetailPage(dishId = it1, navController = navController, dishDetailViewModel = DishDetailViewModel()) }
             }
         }
     }
