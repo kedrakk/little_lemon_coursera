@@ -35,11 +35,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.AsyncImage
 import com.example.littlelemoncoursera.R
+import com.example.littlelemoncoursera.data.local.TestDishData
 import com.example.littlelemoncoursera.model.Dish
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.LogoImage
+import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,13 +64,13 @@ fun HomeContent(navController: NavController) {
                     navController.navigate(Routes.SEARCH.name)
                 }
             )
-            OrderForDelivery(categories = listOf("Starters","Main","Dessert","Size"))
+            OrderForDelivery(categories = listOf("Starters", "Main", "Dessert", "Size"))
             Divider()
             DishesList(
-                dishesList = listOf<Dish>(
-                    Dish(1,"Grilled Fish","Our Bruschetta is made from grilled bread that has been smeared with garlic and seasoned with salt and olive oil.","10","https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/grilledFish.jpg?raw=true","mains"),
-                    Dish(2,"Pasta","Our Bruschetta is made from grilled bread that has been smeared with garlic and seasoned with salt and olive oil.","10","https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/pasta.jpg?raw=true","mains"),
-                )
+                dishesList = TestDishData.TestDishDataList,
+                onDishItemClicked = {dishId->
+                    navController.navigate("${Routes.DISH_DETAIL.name}/$dishId")
+                }
             )
         }
     }
@@ -151,7 +152,7 @@ fun HomeHero(onSearch: () -> Unit) {
 }
 
 @Composable
-fun SearchBoxOnHero(onSearch:()->Unit) {
+fun SearchBoxOnHero(onSearch: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -179,7 +180,7 @@ fun SearchBoxOnHero(onSearch:()->Unit) {
 }
 
 @Composable
-fun OrderForDelivery(categories:List<String>) {
+fun OrderForDelivery(categories: List<String>) {
     Column(
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 20.dp)
     ) {
@@ -192,9 +193,9 @@ fun OrderForDelivery(categories:List<String>) {
         )
         LazyRow(
             modifier = Modifier.padding(vertical = 20.dp)
-        ){
+        ) {
             items(
-                count = categories.size, 
+                count = categories.size,
                 itemContent = {
                     CategoryPill(label = categories[it])
                 }
@@ -204,7 +205,7 @@ fun OrderForDelivery(categories:List<String>) {
 }
 
 @Composable
-fun CategoryPill(label:String) {
+fun CategoryPill(label: String) {
     Surface(
         color = MaterialTheme.colorScheme.primary.copy(alpha = .3F),
         modifier = Modifier
@@ -223,23 +224,32 @@ fun CategoryPill(label:String) {
 }
 
 @Composable
-fun DishesList(dishesList:List<Dish>) {
+fun DishesList(dishesList: List<Dish>,onDishItemClicked:(Int)->Unit) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 10.dp)
-    ){
+    ) {
         items(
             dishesList.size,
             itemContent = {
-                DishItem(dishItem = dishesList[it])
+                DishItem(
+                    dishItem = dishesList[it],
+                    onDishClicked = {
+                        onDishItemClicked(dishesList[it].id)
+                    }
+                )
             }
         )
     }
 }
 
 @Composable
-fun DishItem(dishItem:Dish) {
+fun DishItem(dishItem: Dish, onDishClicked: () -> Unit) {
     Column(
-        modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp),
+        modifier = Modifier
+            .padding(horizontal = 15.dp, vertical = 10.dp)
+            .clickable {
+                onDishClicked()
+            },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -262,19 +272,17 @@ fun DishItem(dishItem:Dish) {
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "$"+dishItem.price,
+                    text = "$" + dishItem.price,
                     style = MaterialTheme.typography.bodyLarge.copy(
                         fontWeight = FontWeight.Bold,
                     ),
                     modifier = Modifier.padding(bottom = 5.dp)
                 )
             }
-            AsyncImage(
-                model = dishItem.image,
-                contentDescription = dishItem.title,
-                modifier = Modifier
-                    .weight(1F)
-                    .clip(RoundedCornerShape(15))
+            NetworkImageLoader(
+                imageURL = dishItem.image,
+                title = dishItem.title,
+                modifier = Modifier.weight(1F)
             )
         }
         Divider(

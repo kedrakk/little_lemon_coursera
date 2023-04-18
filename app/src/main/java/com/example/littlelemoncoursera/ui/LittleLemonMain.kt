@@ -1,6 +1,8 @@
 package com.example.littlelemoncoursera.ui
 
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,12 +12,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.littlelemoncoursera.model.Dish
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.category.SearchItemPage
+import com.example.littlelemoncoursera.ui.screens.dish.DishDetailPage
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
@@ -111,6 +118,16 @@ fun LittleLemonMainPage(
             }
             composable(Routes.SEARCH.name){
                 SearchItemPage(navController = navController)
+            }
+            composable(
+                "${Routes.DISH_DETAIL.name}/{${RouteKeys.dishId}}",
+                arguments = listOf(
+                    navArgument(RouteKeys.dishId) {
+                        type = NavType.IntType
+                    }
+                )
+            ){
+                it.arguments?.getInt(RouteKeys.dishId)?.let { it1 -> DishDetailPage(dishId = it1, navController = navController) }
             }
         }
     }
