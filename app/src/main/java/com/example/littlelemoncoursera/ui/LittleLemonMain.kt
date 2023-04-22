@@ -17,16 +17,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.littlelemoncoursera.model.AddressInformation
 import com.example.littlelemoncoursera.model.Dish
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.category.SearchItemPage
+import com.example.littlelemoncoursera.ui.screens.checkout.ChooseAddressInformation
+import com.example.littlelemoncoursera.ui.screens.checkout.SelectPaymentPage
 import com.example.littlelemoncoursera.ui.screens.dish.DishDetailPage
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
+import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
 import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainUIState
@@ -129,6 +133,12 @@ fun LittleLemonMainPage(
                 )
             ){
                 it.arguments?.getInt(RouteKeys.dishId)?.let { it1 -> DishDetailPage(dishId = it1, navController = navController, dishDetailViewModel = DishDetailViewModel()) }
+            }
+            composable(Routes.ADDRESS_CONFIRM.name){
+                ChooseAddressInformation(viewModel = CheckoutViewModel(), navController = navController)
+            }
+            composable(Routes.SELECT_PAYMENT.name){
+                SelectPaymentPage(navController = navController)
             }
         }
     }

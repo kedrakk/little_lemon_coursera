@@ -1,6 +1,5 @@
 package com.example.littlelemoncoursera.ui.screens.dish
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,23 +27,29 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.data.local.TestDishData
+import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
+import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
 import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DishDetailPage(dishId: Int,navController:NavController,dishDetailViewModel: DishDetailViewModel) {
+fun DishDetailPage(
+    dishId: Int,
+    navController: NavController,
+    dishDetailViewModel: DishDetailViewModel
+) {
     val uiState by dishDetailViewModel.uiState.collectAsState()
-    val dish= TestDishData.TestDishDataList.first {
+    val dish = TestDishData.TestDishDataList.first {
         it.id == dishId
     }
     return Scaffold(
         topBar = {
-            DishDetailAppBar(
+            CommonAppBar(
                 title = dish.title,
                 onBackClicked = {
-                    if(navController.previousBackStackEntry!=null){
+                    if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
                     }
                 }
@@ -53,14 +57,23 @@ fun DishDetailPage(dishId: Int,navController:NavController,dishDetailViewModel: 
         },
         bottomBar = {
             Column() {
-                ActionButton(onClick = { /*TODO*/ }, label = "Order Now", verticalPadding = 10)
-                ActionButton(onClick = { /*TODO*/ }, label = "Add To Cart", isOutline = true, verticalPadding = 10)
+                ActionButton(
+                    onClick = { navController.navigate(Routes.ADDRESS_CONFIRM.name) },
+                    label = "Order Now",
+                    verticalPadding = 10
+                )
+                ActionButton(
+                    onClick = { /*TODO*/ },
+                    label = "Add To Cart",
+                    isOutline = true,
+                    verticalPadding = 10
+                )
             }
         }
     ) {
         LazyColumn(
             modifier = Modifier.padding(it)
-        ){
+        ) {
             item {
                 NetworkImageLoader(
                     imageURL = dish.image,
@@ -93,7 +106,7 @@ fun DishDetailPage(dishId: Int,navController:NavController,dishDetailViewModel: 
                         }
                     )
                     Column(
-                       horizontalAlignment = Alignment.End,
+                        horizontalAlignment = Alignment.End,
                         modifier = Modifier
                             .weight(1F)
                             .padding(horizontal = 15.dp)
@@ -103,7 +116,7 @@ fun DishDetailPage(dishId: Int,navController:NavController,dishDetailViewModel: 
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(
-                            text = if(uiState.selectedQty>1) {
+                            text = if (uiState.selectedQty > 1) {
                                 "$" + uiState.totalPrice.toString()
                             } else {
                                 "$" + dish.price
@@ -121,7 +134,7 @@ fun DishDetailPage(dishId: Int,navController:NavController,dishDetailViewModel: 
 }
 
 @Composable
-fun CategoryIndicator(name:String) {
+fun CategoryIndicator(name: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -129,46 +142,28 @@ fun CategoryIndicator(name:String) {
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-       Icon(
-           painter = painterResource(id = R.drawable.baseline_fastfood_24),
-           contentDescription = name,
-           modifier = Modifier.padding(horizontal = 10.dp),
-           tint = MaterialTheme.colorScheme.tertiary
-       )
-       Text(
-           text = name.uppercase(),
-           style = MaterialTheme.typography.bodyMedium.copy(
-               color = MaterialTheme.colorScheme.tertiary,
-               fontWeight = FontWeight.Bold
-           ),
-       )
+        Icon(
+            painter = painterResource(id = R.drawable.baseline_fastfood_24),
+            contentDescription = name,
+            modifier = Modifier.padding(horizontal = 10.dp),
+            tint = MaterialTheme.colorScheme.tertiary
+        )
+        Text(
+            text = name.uppercase(),
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.tertiary,
+                fontWeight = FontWeight.Bold
+            ),
+        )
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DishDetailAppBar(title:String,onBackClicked:()->Unit,) {
-    TopAppBar(
-        title = {
-                Text(text = title)
-        },
-        navigationIcon = {
-            IconButton(onClick = { onBackClicked() }) {
-                Image(
-                    painter = painterResource(id = R.drawable.baseline_arrow_back_24),
-                    contentDescription = "Back"
-                )
-            }
-        }
-    )
 }
 
 @Composable
 fun SelectDishQty(
-    currentQty:String,
+    currentQty: String,
     modifier: Modifier,
-    onIncreased:()->Unit,
-    onDescreased:()->Unit,
+    onIncreased: () -> Unit,
+    onDescreased: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -180,7 +175,10 @@ fun SelectDishQty(
         IconButton(
             onClick = { onIncreased() }
         ) {
-            Icon(painter = painterResource(id = R.drawable.baseline_add_24), contentDescription = "Add")
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_add_24),
+                contentDescription = "Add"
+            )
         }
         Text(
             text = currentQty,
@@ -190,7 +188,10 @@ fun SelectDishQty(
             modifier = Modifier.padding(horizontal = 10.dp)
         )
         IconButton(onClick = { onDescreased() }) {
-            Icon(painter = painterResource(id = R.drawable.baseline_remove_24), contentDescription = "Remove")
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_remove_24),
+                contentDescription = "Remove"
+            )
         }
     }
 }
