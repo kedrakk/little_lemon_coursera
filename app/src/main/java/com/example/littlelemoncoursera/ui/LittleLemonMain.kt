@@ -23,6 +23,7 @@ import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.category.SearchItemPage
+import com.example.littlelemoncoursera.ui.screens.checkout.CheckOutReviewPage
 import com.example.littlelemoncoursera.ui.screens.checkout.ChooseAddressInformation
 import com.example.littlelemoncoursera.ui.screens.checkout.SelectPaymentPage
 import com.example.littlelemoncoursera.ui.screens.dish.DishDetailPage
@@ -54,7 +55,7 @@ fun LittleLemonMainPage(
         }
     }
     val context = LocalContext.current
-
+    val checkoutViewModel = CheckoutViewModel()
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -132,13 +133,26 @@ fun LittleLemonMainPage(
                     }
                 )
             ){
-                it.arguments?.getInt(RouteKeys.dishId)?.let { it1 -> DishDetailPage(dishId = it1, navController = navController, dishDetailViewModel = DishDetailViewModel()) }
+                val dishDetailViewModel = DishDetailViewModel()
+                it.arguments?.getInt(RouteKeys.dishId)?.let {
+                        it1 -> DishDetailPage(
+                    dishId = it1,
+                    navController = navController,
+                    dishDetailViewModel = dishDetailViewModel,
+                    onOrderNow = {dishList,total ->
+                        checkoutViewModel.setItemAndPrice(newItemsList = dishList, newPrice = total)
+                    }
+                )
+                }
             }
             composable(Routes.ADDRESS_CONFIRM.name){
-                ChooseAddressInformation(viewModel = CheckoutViewModel(), navController = navController)
+                ChooseAddressInformation(viewModel = checkoutViewModel, navController = navController)
             }
             composable(Routes.SELECT_PAYMENT.name){
-                SelectPaymentPage(navController = navController)
+                SelectPaymentPage(navController = navController, viewModel = checkoutViewModel)
+            }
+            composable(Routes.CHECKOUT_REVIEW.name){
+                CheckOutReviewPage(navController = navController, viewModel = checkoutViewModel)
             }
         }
     }

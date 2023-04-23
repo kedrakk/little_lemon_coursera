@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.data.local.TestDishData
+import com.example.littlelemoncoursera.model.Dish
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
@@ -38,7 +39,8 @@ import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
 fun DishDetailPage(
     dishId: Int,
     navController: NavController,
-    dishDetailViewModel: DishDetailViewModel
+    dishDetailViewModel: DishDetailViewModel,
+    onOrderNow: (List<Dish>,Int) -> Unit,
 ) {
     val uiState by dishDetailViewModel.uiState.collectAsState()
     val dish = TestDishData.TestDishDataList.first {
@@ -58,7 +60,14 @@ fun DishDetailPage(
         bottomBar = {
             Column() {
                 ActionButton(
-                    onClick = { navController.navigate(Routes.ADDRESS_CONFIRM.name) },
+                    onClick = {
+                        val dishList:MutableList<Dish> = mutableListOf<Dish>()
+                        for (i in 1..uiState.selectedQty){
+                            dishList.add(dish)
+                        }
+                        onOrderNow(dishList,uiState.totalPrice)
+                        navController.navigate(Routes.ADDRESS_CONFIRM.name)
+                    },
                     label = "Order Now",
                     verticalPadding = 10
                 )
