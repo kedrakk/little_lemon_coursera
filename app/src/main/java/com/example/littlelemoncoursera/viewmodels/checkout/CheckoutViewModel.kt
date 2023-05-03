@@ -1,8 +1,8 @@
 package com.example.littlelemoncoursera.viewmodels.checkout
 
 import androidx.lifecycle.ViewModel
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
 import com.example.littlelemoncoursera.model.AddressInformation
-import com.example.littlelemoncoursera.model.Dish
 import com.example.littlelemoncoursera.model.PaymentMethod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +13,7 @@ class CheckoutViewModel:ViewModel() {
     private val _uiState = MutableStateFlow(CheckoutUIState())
     val uiState: StateFlow<CheckoutUIState> = _uiState.asStateFlow()
 
-    fun setItemAndPrice(newItemsList:List<Dish>,newPrice:Int){
+    fun setItemAndPrice(newItemsList:List<LocalDishItem>,newPrice:Int){
         _uiState.update {
             it.copy(selectedItems = newItemsList, totalPrice = newPrice)
         }

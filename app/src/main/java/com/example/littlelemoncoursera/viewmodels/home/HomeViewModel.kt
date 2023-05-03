@@ -12,6 +12,7 @@ class HomeViewModel:ViewModel() {
     val uiState: StateFlow<HomeUIState> = _uiState.asStateFlow()
     val bottomBarItems = HomeBottomBarData.homeBottomBarItems
 
+
     fun changeIndex(newIndex:Int){
         _uiState.update {
             it.copy(selectedIndex = newIndex)

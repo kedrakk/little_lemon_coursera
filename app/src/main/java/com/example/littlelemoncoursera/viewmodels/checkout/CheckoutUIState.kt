@@ -1,9 +1,9 @@
 package com.example.littlelemoncoursera.viewmodels.checkout
 
 import com.example.littlelemoncoursera.data.local.PaymentMethodList
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
 import com.example.littlelemoncoursera.model.AddressInformation
 import com.example.littlelemoncoursera.model.AddressType
-import com.example.littlelemoncoursera.model.Dish
 import com.example.littlelemoncoursera.model.PaymentMethod
 
 data class CheckoutUIState (
@@ -15,6 +15,6 @@ data class CheckoutUIState (
     val showAddForm:Boolean=false,
     val paymentList:List<PaymentMethod> = PaymentMethodList.allPaymentMethods,
     val selectedPaymentMethod: PaymentMethod? = null,
-    val selectedItems:List<Dish> = listOf(),
+    val selectedItems:List<LocalDishItem> = listOf(),
     val totalPrice:Int=0,
 )

@@ -24,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,8 +37,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
-import com.example.littlelemoncoursera.data.local.TestDishData
-import com.example.littlelemoncoursera.model.Dish
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.localDishDatabase
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.LogoImage
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
@@ -54,6 +55,7 @@ fun HomeContent(navController: NavController) {
             )
         }
     ) {
+        val menuItems = localDishDatabase.localDishDao().getLocalDishes().observeAsState(initial = emptyList())
         Column(
             Modifier
                 .fillMaxSize()
@@ -67,7 +69,7 @@ fun HomeContent(navController: NavController) {
             OrderForDelivery(categories = listOf("Starters", "Main", "Dessert", "Size"))
             Divider()
             DishesList(
-                dishesList = TestDishData.TestDishDataList,
+                dishesList = menuItems.value,
                 onDishItemClicked = {dishId->
                     navController.navigate("${Routes.DISH_DETAIL.name}/$dishId")
                 }
@@ -224,7 +226,7 @@ fun CategoryPill(label: String) {
 }
 
 @Composable
-fun DishesList(dishesList: List<Dish>,onDishItemClicked:(Int)->Unit) {
+fun DishesList(dishesList: List<LocalDishItem>,onDishItemClicked:(Int)->Unit) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 10.dp)
     ) {
@@ -243,7 +245,7 @@ fun DishesList(dishesList: List<Dish>,onDishItemClicked:(Int)->Unit) {
 }
 
 @Composable
-fun DishItem(dishItem: Dish, onDishClicked: () -> Unit) {
+fun DishItem(dishItem: LocalDishItem, onDishClicked: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(horizontal = 15.dp, vertical = 10.dp)

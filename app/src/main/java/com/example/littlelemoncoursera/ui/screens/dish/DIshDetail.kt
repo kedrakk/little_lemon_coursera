@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,11 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
-import com.example.littlelemoncoursera.data.local.TestDishData
-import com.example.littlelemoncoursera.model.Dish
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.localDishDatabase
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
+import com.example.littlelemoncoursera.ui.screens.components.EmptyPageComponent
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
 import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
 
@@ -40,12 +42,12 @@ fun DishDetailPage(
     dishId: Int,
     navController: NavController,
     dishDetailViewModel: DishDetailViewModel,
-    onOrderNow: (List<Dish>,Int) -> Unit,
+    onOrderNow: (List<LocalDishItem>,Int) -> Unit,
 ) {
     val uiState by dishDetailViewModel.uiState.collectAsState()
-    val dish = TestDishData.TestDishDataList.first {
-        it.id == dishId
-    }
+    val dish = localDishDatabase.localDishDao().getLocalDishById(dishId).observeAsState().value
+        ?: return EmptyPageComponent(message = "Empty Dish")
+
     return Scaffold(
         topBar = {
             CommonAppBar(
@@ -61,7 +63,7 @@ fun DishDetailPage(
             Column() {
                 ActionButton(
                     onClick = {
-                        val dishList:MutableList<Dish> = mutableListOf<Dish>()
+                        val dishList:MutableList<LocalDishItem> = mutableListOf<LocalDishItem>()
                         for (i in 1..uiState.selectedQty){
                             dishList.add(dish)
                         }
