@@ -11,16 +11,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun NetworkImageLoader(imageURL: String, title: String, modifier: Modifier) {
-    AsyncImage(
-        model = imageURL,
-        contentDescription = title,
+    GlideImage(
+        model = imageURL, contentDescription = title,
         modifier = modifier
-            .clip(RoundedCornerShape(15))
+            .clip(RoundedCornerShape(15)),
     )
 }
 

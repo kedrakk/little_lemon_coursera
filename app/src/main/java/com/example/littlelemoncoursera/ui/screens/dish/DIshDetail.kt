@@ -109,7 +109,7 @@ fun DishDetailPage(
                                 originalPrice = dish.price.toInt()
                             )
                         },
-                        onDescreased = {
+                        onDecreased = {
                             dishDetailViewModel.decreaseQty(
                                 prevQty = uiState.selectedQty,
                                 originalPrice = dish.price.toInt()
@@ -174,7 +174,7 @@ fun SelectDishQty(
     currentQty: String,
     modifier: Modifier,
     onIncreased: () -> Unit,
-    onDescreased: () -> Unit,
+    onDecreased: () -> Unit,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -198,7 +198,7 @@ fun SelectDishQty(
             ),
             modifier = Modifier.padding(horizontal = 10.dp)
         )
-        IconButton(onClick = { onDescreased() }) {
+        IconButton(onClick = { onDecreased() }) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_remove_24),
                 contentDescription = "Remove"
