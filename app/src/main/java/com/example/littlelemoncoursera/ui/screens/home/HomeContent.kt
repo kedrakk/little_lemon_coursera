@@ -32,8 +32,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
@@ -42,20 +44,28 @@ import com.example.littlelemoncoursera.localDishDatabase
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.LogoImage
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeContent(navController: NavController,onSearchClicked: (dishDataList:List<LocalDishItem>) -> Unit,) {
-    val menuItems = localDishDatabase.localDishDao().getLocalDishes().observeAsState(initial = emptyList())
+fun HomeContent(
+    navController: NavController,
+    onSearchClicked: (dishDataList: List<LocalDishItem>) -> Unit,
+    categories: List<String>,
+    menuItems: List<LocalDishItem>,
+    onCategoryItemClicked: (String) -> Unit,
+    selectedCategory:String,
+) {
+
     Scaffold(
         topBar = {
             HomeAppBar(
                 onNavigateToSearchPage = {
-                    onSearchClicked(menuItems.value)
+                    onSearchClicked(menuItems)
                 }
             )
         }
-    ) {
+    ) { it ->
         Column(
             Modifier
                 .fillMaxSize()
@@ -63,14 +73,20 @@ fun HomeContent(navController: NavController,onSearchClicked: (dishDataList:List
         ) {
             HomeHero(
                 onSearch = {
-                    onSearchClicked(menuItems.value)
+                    onSearchClicked(menuItems)
                 }
             )
-            OrderForDelivery(categories = listOf("Starters", "Main", "Dessert", "Size"))
+            OrderForDelivery(
+                categories = categories,
+                onCategoryItemClicked = { categoryName ->
+                    onCategoryItemClicked(categoryName)
+                },
+                selectedCategory = selectedCategory,
+            )
             Divider()
             DishesList(
-                dishesList = menuItems.value,
-                onDishItemClicked = {dishId->
+                dishesList = menuItems,
+                onDishItemClicked = { dishId ->
                     navController.navigate("${Routes.DISH_DETAIL.name}/$dishId")
                 }
             )
@@ -182,7 +198,7 @@ fun SearchBoxOnHero(onSearch: () -> Unit) {
 }
 
 @Composable
-fun OrderForDelivery(categories: List<String>) {
+fun OrderForDelivery(categories: List<String>, onCategoryItemClicked: (String) -> Unit,selectedCategory: String) {
     Column(
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 20.dp)
     ) {
@@ -199,7 +215,11 @@ fun OrderForDelivery(categories: List<String>) {
             items(
                 count = categories.size,
                 itemContent = {
-                    CategoryPill(label = categories[it])
+                    CategoryPill(
+                        label = categories[it],
+                        onCategoryItemClicked = { itemName -> onCategoryItemClicked(itemName) },
+                        isSelected = categories[it] == selectedCategory
+                    )
                 }
             )
         }
@@ -207,18 +227,21 @@ fun OrderForDelivery(categories: List<String>) {
 }
 
 @Composable
-fun CategoryPill(label: String) {
+fun CategoryPill(label: String, onCategoryItemClicked: (String) -> Unit,isSelected:Boolean) {
     Surface(
-        color = MaterialTheme.colorScheme.primary.copy(alpha = .3F),
+        color = if(isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = .3F),
         modifier = Modifier
             .padding(end = 10.dp)
-            .clip(RoundedCornerShape(50)),
+            .clip(RoundedCornerShape(50))
+            .clickable {
+                onCategoryItemClicked(label)
+            },
     ) {
         Text(
-            text = label,
+            text = label.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
             style = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = if(isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
             ),
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
         )
@@ -226,7 +249,7 @@ fun CategoryPill(label: String) {
 }
 
 @Composable
-fun DishesList(dishesList: List<LocalDishItem>,onDishItemClicked:(Int)->Unit) {
+fun DishesList(dishesList: List<LocalDishItem>, onDishItemClicked: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier.padding(vertical = 10.dp)
     ) {

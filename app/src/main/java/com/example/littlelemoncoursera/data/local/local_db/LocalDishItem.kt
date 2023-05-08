@@ -25,11 +25,17 @@ interface MenuDao{
     @Query("SELECT * FROM localDishItem")
     fun getLocalDishes(): LiveData<List<LocalDishItem>>
 
+    @Query("SELECT * FROM localDishItem where category = :categoryName")
+    fun getLocalDishesByCategory(categoryName:String): LiveData<List<LocalDishItem>>
+
     @Query("SELECT * FROM localDishItem where id = :id")
     fun getLocalDishById(id:Int): LiveData<LocalDishItem>
 
     @Insert()
     fun saveLocalDishes(dishList: List<LocalDishItem>)
+
+    @Query("SELECT DISTINCT category FROM localDishItem")
+    fun getCategoryNames(): LiveData<List<String>>
 }
 
 @Database(entities = [LocalDishItem::class], version = 1)

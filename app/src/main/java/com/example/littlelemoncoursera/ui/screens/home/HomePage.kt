@@ -17,7 +17,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,8 +48,14 @@ fun HomePage(
     navController: NavController,
     onSearchClicked: (dishDataList:List<LocalDishItem>) -> Unit,
 ) {
-
+    var categoryName by remember {
+        mutableStateOf("")
+    }
     val homeUIState = homeViewModel.uiState.collectAsState().value
+    val categories =
+        homeViewModel.getAllCategories().observeAsState(initial = emptyList())
+    val localDishes =
+        homeViewModel.getLocalDishes(categoryName = categoryName).observeAsState(initial = emptyList())
 
     Scaffold(
         bottomBar = {
@@ -53,7 +64,7 @@ fun HomePage(
                 onItemClick = {
                     homeViewModel.changeIndex(it)
                 },
-                activeIndex = homeUIState.selectedIndex
+                activeIndex = homeUIState.selectedIndex,
             )
         }
     ) {
@@ -62,12 +73,38 @@ fun HomePage(
                 .padding(paddingValues = it)
         ) {
             when (homeUIState.selectedIndex) {
-                0 -> HomeContent(navController = navController,onSearchClicked = onSearchClicked,)
+                0 -> HomeContent(
+                    navController = navController,
+                    onSearchClicked = onSearchClicked,
+                    categories = categories.value,
+                    menuItems = localDishes.value,
+                    onCategoryItemClicked = {name->
+                        categoryName = if(categoryName.isNotEmpty() && categoryName==name){
+                            ""
+                        }else{
+                            name
+                        }
+                    },
+                    selectedCategory = categoryName,
+                )
                 1 -> CategoryContent()
                 2 -> CartContent()
                 3 -> ReservationContent()
                 4 -> ProfileContent(littleLemonUser = littleLemonUser, onLogout = { onLogout() })
-                else -> HomeContent(navController = navController,onSearchClicked = onSearchClicked,)
+                else -> HomeContent(
+                    navController = navController,
+                    onSearchClicked = onSearchClicked,
+                    categories = categories.value,
+                    menuItems = localDishes.value,
+                    onCategoryItemClicked = {name->
+                        categoryName = if(categoryName.isNotEmpty() && categoryName==name){
+                            ""
+                        }else{
+                            name
+                        }
+                    },
+                    selectedCategory = categoryName,
+                )
             }
         }
     }
