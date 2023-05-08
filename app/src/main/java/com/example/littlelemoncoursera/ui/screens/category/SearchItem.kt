@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -33,7 +34,8 @@ fun SearchItemPage(navController: NavController, searchViewModel: SearchViewMode
     var keywordText by remember {
         mutableStateOf("")
     }
-    val searchUIState = searchViewModel.uiState.collectAsState().value
+    val localDishes =
+        searchViewModel.searchLocalDishes(keyword = keywordText).observeAsState(initial = emptyList())
 
     Scaffold(
         topBar = {
@@ -41,7 +43,6 @@ fun SearchItemPage(navController: NavController, searchViewModel: SearchViewMode
                 value = keywordText,
                 onValueChange = { text ->
                     keywordText = text
-                    searchViewModel.filterDishes(keyword = keywordText)
                 },
                 onBackClicked = {
                     if (navController.previousBackStackEntry != null) {
@@ -53,7 +54,7 @@ fun SearchItemPage(navController: NavController, searchViewModel: SearchViewMode
     ) {
         Box(modifier = Modifier.padding(it)) {
             SearchedItemList(
-                dishesList = searchUIState.filteredMenuItemsList,
+                dishesList = localDishes.value,
                 onDishItemClicked = {
                     navController.navigateUp()
                     navController.navigate("${Routes.DISH_DETAIL.name}/$it")

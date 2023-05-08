@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.littlelemoncoursera.data.DishDataRepository
 import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.localDishDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,17 +15,11 @@ class SearchViewModel (allDishes:List<LocalDishItem>):ViewModel() {
     private val _uiState = MutableStateFlow(SearchUIState())
     val uiState: StateFlow<SearchUIState> = _uiState.asStateFlow()
 
-    init {
-        _uiState.update {
-            it.copy(filteredMenuItemsList = allDishes)
-        }
-    }
-
-    fun filterDishes(keyword:String){
-        _uiState.update {
-            it.copy(
-                filteredMenuItemsList = it.filteredMenuItemsList.filter {data-> data.title.contains(keyword,ignoreCase=true) }
-            )
+    fun searchLocalDishes(keyword: String):LiveData<List<LocalDishItem>> {
+        return if(keyword.isEmpty()){
+            localDishDatabase.localDishDao().getLocalDishes()
+        }else{
+            localDishDatabase.localDishDao().searchLocalDishesByKeyword(keyword)
         }
     }
 

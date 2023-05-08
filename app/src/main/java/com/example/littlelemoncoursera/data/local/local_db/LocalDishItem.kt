@@ -28,6 +28,9 @@ interface MenuDao{
     @Query("SELECT * FROM localDishItem where category = :categoryName")
     fun getLocalDishesByCategory(categoryName:String): LiveData<List<LocalDishItem>>
 
+    @Query("SELECT * FROM localDishItem where title LIKE '%' || :keyword || '%'")
+    fun searchLocalDishesByKeyword(keyword:String): LiveData<List<LocalDishItem>>
+
     @Query("SELECT * FROM localDishItem where id = :id")
     fun getLocalDishById(id:Int): LiveData<LocalDishItem>
 
