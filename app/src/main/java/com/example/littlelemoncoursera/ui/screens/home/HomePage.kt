@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.data.local.HomeBottomBarData
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
 import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
@@ -39,7 +40,8 @@ fun HomePage(
     homeViewModel: HomeViewModel,
     littleLemonUser: LittleLemonUser,
     onLogout: () -> Unit,
-    navController: NavController
+    navController: NavController,
+    onSearchClicked: (dishDataList:List<LocalDishItem>) -> Unit,
 ) {
 
     val homeUIState = homeViewModel.uiState.collectAsState().value
@@ -60,12 +62,12 @@ fun HomePage(
                 .padding(paddingValues = it)
         ) {
             when (homeUIState.selectedIndex) {
-                0 -> HomeContent(navController = navController)
+                0 -> HomeContent(navController = navController,onSearchClicked = onSearchClicked,)
                 1 -> CategoryContent()
                 2 -> CartContent()
                 3 -> ReservationContent()
                 4 -> ProfileContent(littleLemonUser = littleLemonUser, onLogout = { onLogout() })
-                else -> HomeContent(navController = navController)
+                else -> HomeContent(navController = navController,onSearchClicked = onSearchClicked,)
             }
         }
     }

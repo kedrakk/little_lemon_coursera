@@ -70,6 +70,7 @@ fun TextInputField(
             onPasswordVisibilityChanged=onPasswordVisibilityChanged,
             isSingleLine = isSingleLine,
             maxLines = maxLines,
+            placeholderText = label,
         )
     }
 }
@@ -86,6 +87,7 @@ fun LittleLemonTextBox(
     isOutline:Boolean = true,
     isSingleLine:Boolean=true,
     maxLines:Int=1,
+    placeholderText:String,
 ) {
     if(isOutline)
     {
@@ -100,6 +102,9 @@ fun LittleLemonTextBox(
                 .fillMaxWidth(),
             singleLine = isSingleLine,
             maxLines = maxLines,
+            label={
+              Text(text = placeholderText)
+            },
             trailingIcon = {
                 if (isPassword) PasswordVisibility(isVisible = passwordVisible) {
                     onPasswordVisibilityChanged()
@@ -119,6 +124,9 @@ fun LittleLemonTextBox(
             colors = TextFieldDefaults.textFieldColors(
                 containerColor = Color.Transparent,
             ),
+            label={
+                Text(text = placeholderText)
+            },
         )
     }
 }

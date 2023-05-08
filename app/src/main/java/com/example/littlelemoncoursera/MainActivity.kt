@@ -1,6 +1,5 @@
 package com.example.littlelemoncoursera
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -11,6 +10,7 @@ import com.example.littlelemoncoursera.application.MenuNetworkData
 import com.example.littlelemoncoursera.application.menuItemToDishItem
 import com.example.littlelemoncoursera.data.local.URL
 import com.example.littlelemoncoursera.data.local.local_db.LocalDishDatabase
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
 import com.example.littlelemoncoursera.ui.LittleLemonMainPage
 import com.example.littlelemoncoursera.ui.theme.LittleLemonCourseraTheme
 import io.ktor.client.HttpClient
@@ -35,6 +35,8 @@ lateinit var localDishDatabase:LocalDishDatabase
 
 class MainActivity : ComponentActivity() {
 
+    var dishItems = listOf<LocalDishItem>()
+
     private val dishDatabase  by lazy {
         Room.databaseBuilder(this,LocalDishDatabase::class.java,"localDish.db").build()
     }
@@ -44,7 +46,7 @@ class MainActivity : ComponentActivity() {
                 client.get(URL.BASEURL).body<MenuNetworkData>()
             if(responseData.menuItemNetworkList.isNotEmpty()){
                 withContext(Dispatchers.IO){
-                    val dishItems = menuItemToDishItem(responseData.menuItemNetworkList)
+                    dishItems = menuItemToDishItem(responseData.menuItemNetworkList)
                     localDishDatabase.localDishDao().saveLocalDishes(dishItems)
                 }
             }

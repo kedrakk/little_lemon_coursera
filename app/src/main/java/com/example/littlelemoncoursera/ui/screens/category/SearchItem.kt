@@ -1,15 +1,17 @@
 package com.example.littlelemoncoursera.ui.screens.category
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,34 +19,47 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.LittleLemonTextBox
+import com.example.littlelemoncoursera.viewmodels.category.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchItemPage(navController: NavController) {
+fun SearchItemPage(navController: NavController, searchViewModel: SearchViewModel) {
     var keywordText by remember {
         mutableStateOf("")
     }
+    val searchUIState = searchViewModel.uiState.collectAsState().value
+
     Scaffold(
         topBar = {
             SearchPageAppBar(
                 value = keywordText,
-                onValueChange = {
-                    keywordText=it
+                onValueChange = { text ->
+                    keywordText = text
+                    searchViewModel.filterDishes(keyword = keywordText)
                 },
                 onBackClicked = {
-                    if(navController.previousBackStackEntry!=null){
+                    if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
                     }
                 }
             )
         }
     ) {
-        Box(modifier = Modifier.padding(it).fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = "Search Page")
+        Box(modifier = Modifier.padding(it)) {
+            SearchedItemList(
+                dishesList = searchUIState.filteredMenuItemsList,
+                onDishItemClicked = {
+                    navController.navigateUp()
+                    navController.navigate("${Routes.DISH_DETAIL.name}/$it")
+                },
+
+                )
         }
     }
 }
@@ -69,6 +84,30 @@ fun SearchPageAppBar(
             },
             isError = false,
             isOutline = false,
+            placeholderText = "Enter Search Phrase",
+        )
+    }
+}
+
+@Composable
+fun SearchedItemList(dishesList: List<LocalDishItem>, onDishItemClicked: (Int) -> Unit) {
+    LazyColumn(
+        modifier = Modifier.padding(vertical = 10.dp)
+    ) {
+        items(
+            dishesList.size,
+            itemContent = {
+                Text(
+                    text = dishesList[it].title,
+                    modifier = Modifier
+                        .padding(
+                            horizontal = 20.dp, vertical = 15.dp
+                        )
+                        .clickable {
+                            onDishItemClicked(dishesList[it].id)
+                        }
+                )
+            }
         )
     }
 }

@@ -1,8 +1,6 @@
 package com.example.littlelemoncoursera.ui
 
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +15,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.littlelemoncoursera.data.DishDataRepository
+import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.localDishDatabase
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
@@ -26,9 +27,10 @@ import com.example.littlelemoncoursera.ui.screens.checkout.ChooseAddressInformat
 import com.example.littlelemoncoursera.ui.screens.checkout.SelectPaymentPage
 import com.example.littlelemoncoursera.ui.screens.dish.DishDetailPage
 import com.example.littlelemoncoursera.ui.screens.home.HomePage
-import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
+import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
+import com.example.littlelemoncoursera.viewmodels.category.SearchViewModel
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
 import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
@@ -46,14 +48,15 @@ fun LittleLemonMainPage(
     val newDestination = if (uiState.littleLemonUser.email.isNotEmpty()) {
         Routes.HOME.name
     } else {
-        if(uiState.isLoading){
+        if (uiState.isLoading) {
             Routes.SPLASH.name
-        }else{
+        } else {
             Routes.LOGIN.name
         }
     }
     val context = LocalContext.current
     val checkoutViewModel = CheckoutViewModel()
+    var dishItemList:List<LocalDishItem> = listOf()
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -114,14 +117,23 @@ fun LittleLemonMainPage(
                             }
                         }
                     },
-                    navController = navController
+                    navController = navController,
+                    onSearchClicked = {
+                        dishItemList = it
+                        navController.navigate(Routes.SEARCH.name)
+                    }
                 )
             }
             composable(Routes.SPLASH.name) {
                 SplashPage()
             }
-            composable(Routes.SEARCH.name){
-                SearchItemPage(navController = navController)
+            composable(Routes.SEARCH.name) {
+                SearchItemPage(
+                    navController = navController,
+                    searchViewModel = SearchViewModel(
+                        allDishes = dishItemList
+                    ),
+                )
             }
             composable(
                 "${Routes.DISH_DETAIL.name}/{${RouteKeys.dishId}}",
@@ -130,26 +142,32 @@ fun LittleLemonMainPage(
                         type = NavType.IntType
                     }
                 )
-            ){
+            ) {
                 val dishDetailViewModel = DishDetailViewModel()
-                it.arguments?.getInt(RouteKeys.dishId)?.let {
-                        it1 -> DishDetailPage(
-                    dishId = it1,
-                    navController = navController,
-                    dishDetailViewModel = dishDetailViewModel,
-                    onOrderNow = {dishList,total ->
-                        checkoutViewModel.setItemAndPrice(newItemsList = dishList, newPrice = total)
-                    }
-                )
+                it.arguments?.getInt(RouteKeys.dishId)?.let { it1 ->
+                    DishDetailPage(
+                        dishId = it1,
+                        navController = navController,
+                        dishDetailViewModel = dishDetailViewModel,
+                        onOrderNow = { dishList, total ->
+                            checkoutViewModel.setItemAndPrice(
+                                newItemsList = dishList,
+                                newPrice = total
+                            )
+                        }
+                    )
                 }
             }
-            composable(Routes.ADDRESS_CONFIRM.name){
-                ChooseAddressInformation(viewModel = checkoutViewModel, navController = navController)
+            composable(Routes.ADDRESS_CONFIRM.name) {
+                ChooseAddressInformation(
+                    viewModel = checkoutViewModel,
+                    navController = navController
+                )
             }
-            composable(Routes.SELECT_PAYMENT.name){
+            composable(Routes.SELECT_PAYMENT.name) {
                 SelectPaymentPage(navController = navController, viewModel = checkoutViewModel)
             }
-            composable(Routes.CHECKOUT_REVIEW.name){
+            composable(Routes.CHECKOUT_REVIEW.name) {
                 CheckOutReviewPage(navController = navController, viewModel = checkoutViewModel)
             }
         }

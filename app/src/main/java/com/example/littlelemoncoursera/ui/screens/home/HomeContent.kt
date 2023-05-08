@@ -45,17 +45,17 @@ import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeContent(navController: NavController) {
+fun HomeContent(navController: NavController,onSearchClicked: (dishDataList:List<LocalDishItem>) -> Unit,) {
+    val menuItems = localDishDatabase.localDishDao().getLocalDishes().observeAsState(initial = emptyList())
     Scaffold(
         topBar = {
             HomeAppBar(
                 onNavigateToSearchPage = {
-                    navController.navigate(Routes.SEARCH.name)
+                    onSearchClicked(menuItems.value)
                 }
             )
         }
     ) {
-        val menuItems = localDishDatabase.localDishDao().getLocalDishes().observeAsState(initial = emptyList())
         Column(
             Modifier
                 .fillMaxSize()
@@ -63,7 +63,7 @@ fun HomeContent(navController: NavController) {
         ) {
             HomeHero(
                 onSearch = {
-                    navController.navigate(Routes.SEARCH.name)
+                    onSearchClicked(menuItems.value)
                 }
             )
             OrderForDelivery(categories = listOf("Starters", "Main", "Dessert", "Size"))
