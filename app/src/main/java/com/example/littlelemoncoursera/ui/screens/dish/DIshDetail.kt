@@ -63,11 +63,13 @@ fun DishDetailPage(
             Column() {
                 ActionButton(
                     onClick = {
-                        val dishList:MutableList<LocalDishItem> = mutableListOf<LocalDishItem>()
-                        for (i in 1..uiState.selectedQty){
+                        val dishList: MutableList<LocalDishItem> = mutableListOf<LocalDishItem>()
+                        var totalPrice = 0
+                        for (i in 1..uiState.selectedQty) {
                             dishList.add(dish)
+                            totalPrice += dish.price.toInt()
                         }
-                        onOrderNow(dishList,uiState.totalPrice)
+                        onOrderNow(dishList, totalPrice)
                         navController.navigate(Routes.ADDRESS_CONFIRM.name)
                     },
                     label = "Order Now",
