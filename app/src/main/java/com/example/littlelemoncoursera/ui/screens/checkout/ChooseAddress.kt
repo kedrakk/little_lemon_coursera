@@ -26,8 +26,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,11 +50,15 @@ import com.example.littlelemoncoursera.ui.screens.components.LocalImageLoader
 import com.example.littlelemoncoursera.ui.screens.components.TextButton
 import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavController) {
+    val allAddressInformation = viewModel.getAllAddresses().observeAsState(initial = emptyList())
     val checkoutUIState = viewModel.uiState.collectAsState().value
+    val coroutineScope = rememberCoroutineScope()
     var receiverName by remember {
         mutableStateOf("")
     }
@@ -65,7 +71,11 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     var selectedAddressType by remember {
         mutableStateOf(AddressType.HOME)
     }
+    var selectedAddress: AddressInformation? by remember {
+        mutableStateOf(null)
+    }
     val context = LocalContext.current
+
     Scaffold(
         topBar = {
             CommonAppBar(title = "Confirm Your Address") {
@@ -91,7 +101,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                 )
         },
         bottomBar = {
-            if (!checkoutUIState.showAddForm && checkoutUIState.selectedAddress != null)
+            if (!checkoutUIState.showAddForm && selectedAddress != null)
                 ActionButton(
                     onClick = {
                         navController.navigate(Routes.SELECT_PAYMENT.name)
@@ -116,12 +126,23 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                         fullAddress = it
                     },
                     onSaveAddress = {
+
+                        coroutineScope.launch {
+                            viewModel.addANewAddress(
+                                AddressInformation(
+                                    addressId = null,
+                                    phoneNumber = phoneNumber,
+                                    receiverName = receiverName,
+                                    addressDetailInformation = fullAddress,
+                                    addressType = selectedAddressType
+                                )
+                            )
+                        }
                         Toast.makeText(
                             context,
                             "Save a new address successfully",
                             Toast.LENGTH_SHORT
                         ).show()
-                        viewModel.showOrHideAddForm(false)
                     },
                     modifier = Modifier
                         .fillMaxSize()
@@ -144,12 +165,11 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                     .padding(horizontal = 20.dp)
             ) {
                 ShowAddressList(
-                    addressList = checkoutUIState.addressList,
-                    selectedAddressInformation = checkoutUIState.selectedAddress,
-                    onAddressSelect = {
-                        viewModel.onAddressSelect(it)
-                    }
-                )
+                    addressList = allAddressInformation.value,
+                    selectedAddressInformation = selectedAddress
+                ) {
+                    selectedAddress = it
+                }
             }
         }
     }

@@ -6,7 +6,7 @@ import com.example.littlelemoncoursera.model.AddressType
 
 @Entity
 data class AddressInformation(
-    @PrimaryKey val addressId:Int,
+    @PrimaryKey(autoGenerate = true) val addressId:Int?,
     val phoneNumber: String,
     val receiverName: String,
     val addressDetailInformation: String,
