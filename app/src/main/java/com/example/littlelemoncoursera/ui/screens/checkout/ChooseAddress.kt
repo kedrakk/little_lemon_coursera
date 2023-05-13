@@ -70,6 +70,9 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     var selectedAddressType by remember {
         mutableStateOf(AddressType.HOME)
     }
+    var isShowAddress by remember {
+        mutableStateOf(false)
+    }
     val context = LocalContext.current
 
     Scaffold(
@@ -81,14 +84,14 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
             }
         },
         floatingActionButton = {
-            if (!checkoutUIState.showAddForm)
+            if (!isShowAddress)
                 LocalImageLoader(
                     modifier = Modifier
                         .padding(10.dp)
                         .clip(CircleShape)
                         .background(color = MaterialTheme.colorScheme.primary.copy(alpha = .2F))
                         .clickable {
-                            viewModel.showOrHideAddForm(true)
+                            isShowAddress = true
                         },
                     painterRes = R.drawable.baseline_add_location_alt_24,
                     imageModifier = Modifier
@@ -97,7 +100,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                 )
         },
         bottomBar = {
-            if (!checkoutUIState.showAddForm && checkoutUIState.selectedAddress != null)
+            if (!isShowAddress && checkoutUIState.selectedAddress != null)
                 ActionButton(
                     onClick = {
                         navController.navigate(Routes.SELECT_PAYMENT.name)
@@ -106,7 +109,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                 )
         }
     ) { padding ->
-        if (checkoutUIState.showAddForm) {
+        if (isShowAddress) {
             Box {
                 AddAddressForm(
                     receiverName = receiverName,
@@ -133,6 +136,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                                     addressType = selectedAddressType
                                 )
                             )
+                            isShowAddress = false
                         }
                         Toast.makeText(
                             context,
@@ -145,7 +149,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                         .padding(padding)
                         .padding(horizontal = 20.dp),
                     onCancelSave = {
-                        viewModel.showOrHideAddForm(false)
+                        isShowAddress = false
                     },
                     selectedAddressType = selectedAddressType,
                     onSelectedAddressChange = {
