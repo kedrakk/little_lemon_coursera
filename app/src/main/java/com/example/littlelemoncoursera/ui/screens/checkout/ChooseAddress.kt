@@ -34,14 +34,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.data.local.entity.AddressInformation
+import com.example.littlelemoncoursera.helper.emptyValidation
 import com.example.littlelemoncoursera.model.AddressType
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
@@ -72,6 +75,15 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     }
     var isShowAddress by remember {
         mutableStateOf(false)
+    }
+    var receiverNameError by remember {
+        mutableStateOf("")
+    }
+    var phoneNumberError by remember {
+        mutableStateOf("")
+    }
+    var fullAddressError by remember {
+        mutableStateOf("")
     }
     val context = LocalContext.current
 
@@ -113,36 +125,47 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
             Box {
                 AddAddressForm(
                     receiverName = receiverName,
+                    receiverNameError = receiverNameError,
                     onReceiverNameChanged = {
                         receiverName = it
                     },
                     phoneNumber = phoneNumber,
+                    phoneNumberError = phoneNumberError,
                     onPhoneNumberChanged = {
                         phoneNumber = it
                     },
                     fullAddress = fullAddress,
+                    fullAddressError = fullAddressError,
                     onFullAddressChanged = {
                         fullAddress = it
                     },
                     onSaveAddress = {
-
-                        coroutineScope.launch {
-                            viewModel.addANewAddress(
-                                AddressInformation(
-                                    addressId = null,
-                                    phoneNumber = phoneNumber,
-                                    receiverName = receiverName,
-                                    addressDetailInformation = fullAddress,
-                                    addressType = selectedAddressType
+                        receiverNameError =
+                            if (receiverName.emptyValidation()) "Receiver Name must be filled" else ""
+                        phoneNumberError =
+                            if (phoneNumber.emptyValidation()) "Phone Number must be filled" else ""
+                        fullAddressError =
+                            if (fullAddress.emptyValidation()) "Address must be filled" else ""
+                        if (receiverNameError.isEmpty() && phoneNumberError.isEmpty() && fullAddressError.isEmpty()) {
+                            coroutineScope.launch {
+                                viewModel.addANewAddress(
+                                    AddressInformation(
+                                        addressId = null,
+                                        phoneNumber = phoneNumber,
+                                        receiverName = receiverName,
+                                        addressDetailInformation = fullAddress,
+                                        addressType = selectedAddressType
+                                    )
                                 )
-                            )
-                            isShowAddress = false
+                                isShowAddress = false
+                            }
+                            Toast.makeText(
+                                context,
+                                "Save a new address successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        Toast.makeText(
-                            context,
-                            "Save a new address successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
                     },
                     modifier = Modifier
                         .fillMaxSize()
@@ -178,10 +201,13 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
 @Composable
 fun AddAddressForm(
     receiverName: String,
+    receiverNameError: String,
     onReceiverNameChanged: (String) -> Unit,
     phoneNumber: String,
+    phoneNumberError: String,
     onPhoneNumberChanged: (String) -> Unit,
     fullAddress: String,
+    fullAddressError: String,
     onFullAddressChanged: (String) -> Unit,
     onSaveAddress: () -> Unit,
     onCancelSave: () -> Unit,
@@ -216,23 +242,56 @@ fun AddAddressForm(
             onValueChange = {
                 onReceiverNameChanged(it)
             },
-            isError = false,
+            isError = receiverNameError.isNotEmpty(),
             label = "Enter Receiver Name",
         )
+        if (receiverNameError.isNotEmpty()) {
+            Text(
+                text = "* $receiverNameError",
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.Red,
+                    fontSize = 10.sp
+                ),
+                textAlign = TextAlign.Start,
+            )
+        }
         TextInputField(
             value = phoneNumber,
             onValueChange = { onPhoneNumberChanged(it) },
-            isError = false,
+            isError = phoneNumberError.isNotEmpty(),
             label = "Enter Phone Number",
         )
+        if (phoneNumberError.isNotEmpty()) {
+            Text(
+                text = "* $phoneNumberError",
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.Red,
+                    fontSize = 10.sp
+                ),
+                textAlign = TextAlign.Start,
+            )
+        }
         TextInputField(
             value = fullAddress,
             onValueChange = { onFullAddressChanged(it) },
-            isError = false,
+            isError = fullAddressError.isNotEmpty(),
             label = "Enter Address",
             isSingleLine = false,
             maxLines = 3,
         )
+        if (fullAddressError.isNotEmpty()) {
+            Text(
+                text = "* $fullAddressError",
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = Color.Red,
+                    fontSize = 10.sp
+                ),
+                textAlign = TextAlign.Start,
+            )
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween

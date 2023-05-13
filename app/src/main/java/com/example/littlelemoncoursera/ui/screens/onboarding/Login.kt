@@ -1,7 +1,6 @@
 package com.example.littlelemoncoursera.ui.screens.onboarding
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.littlelemoncoursera.helper.emailValidation
+import com.example.littlelemoncoursera.helper.emptyValidation
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.TextButton
@@ -81,12 +82,12 @@ fun LoginPage(
         ActionButton(
             onClick = {
                 emailError =
-                    if (viewModel.emptyValidation(emailText)) "Email must be filled" else if (viewModel.emailValidation(
-                            emailText
+                    if (emailText.emptyValidation()) "Email must be filled" else if (emailText.emailValidation(
+
                         )
                     ) "Invalid Email" else ""
                 passwordError =
-                    if (viewModel.emptyValidation(passwordText)) "Password must be filled" else ""
+                    if (passwordText.emptyValidation()) "Password must be filled" else ""
                 if (emailError.isEmpty() && passwordError.isEmpty()) {
                     Toast.makeText(
                         context,

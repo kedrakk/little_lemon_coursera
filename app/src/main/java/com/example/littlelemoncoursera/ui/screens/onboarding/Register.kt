@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.littlelemoncoursera.helper.emailValidation
+import com.example.littlelemoncoursera.helper.emptyValidation
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.TextButton
@@ -94,9 +96,9 @@ fun RegisterPage(
                     ActionButton(
                         onClick = {
                             firstNameError =
-                                if (viewModel.emptyValidation(firstNameText)) "First Name must be filled" else ""
+                                if (firstNameText.emptyValidation()) "First Name must be filled" else ""
                             lastNameError =
-                                if (viewModel.emptyValidation(lastNameText)) "Last Name must be filled" else ""
+                                if (lastNameText.emptyValidation()) "Last Name must be filled" else ""
                             if (firstNameError.isEmpty() && lastNameError.isEmpty()) {
                                 viewModel.changeIndex(2)
                             }
@@ -126,8 +128,8 @@ fun RegisterPage(
                     ActionButton(
                         onClick = {
                             emailError =
-                                if (viewModel.emptyValidation(emailText)) "Email must be filled" else if (viewModel.emailValidation(
-                                        emailText
+                                if (emailText.emptyValidation()) "Email must be filled" else if (emailText.emailValidation(
+
                                     )
                                 ) "Invalid Email" else ""
                             if (emailError.isEmpty()) {
@@ -163,7 +165,7 @@ fun RegisterPage(
                     ActionButton(
                         onClick = {
                             passwordError =
-                                if (viewModel.emptyValidation(passwordText)) "Password must be filled" else ""
+                                if (passwordText.emptyValidation()) "Password must be filled" else ""
                             if (passwordError.isEmpty()) {
                                 Toast.makeText(
                                     context,

@@ -22,12 +22,4 @@ class OnboardingViewModel : ViewModel() {
             it.copy(obscured = !_uiState.value.obscured)
         }
     }
-
-    fun emptyValidation(textValue:String):Boolean{
-        return textValue.isEmpty();
-    }
-
-    fun emailValidation(email:String):Boolean{
-        return !Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
 }
