@@ -1,6 +1,6 @@
 package com.example.littlelemoncoursera.application
 
-import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

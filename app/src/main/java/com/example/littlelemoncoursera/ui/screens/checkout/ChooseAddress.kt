@@ -1,6 +1,5 @@
 package com.example.littlelemoncoursera.ui.screens.checkout
 
-import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,7 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
-import com.example.littlelemoncoursera.model.AddressInformation
+import com.example.littlelemoncoursera.data.local.entity.AddressInformation
 import com.example.littlelemoncoursera.model.AddressType
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton

@@ -21,7 +21,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,13 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.data.local.HomeBottomBarData
-import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
-import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.profile.ProfileContent
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -3,22 +3,13 @@ package com.example.littlelemoncoursera.data.local.local_db
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Database
-import androidx.room.Delete
-import androidx.room.Entity
 import androidx.room.Insert
-import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.RoomDatabase
+import androidx.room.Update
+import com.example.littlelemoncoursera.data.local.entity.AddressInformation
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 
-@Entity
-data class LocalDishItem(
-    @PrimaryKey val id: Int,
-    val title: String,
-    val description: String,
-    val price: String,
-    val image: String,
-    val category: String,
-)
 
 @Dao
 interface MenuDao{
@@ -39,9 +30,18 @@ interface MenuDao{
 
     @Query("SELECT DISTINCT category FROM localDishItem")
     fun getCategoryNames(): LiveData<List<String>>
+
+    @Insert()
+    fun addANewAddress(addressInformation: AddressInformation)
+
+    @Query("SELECT * FROM addressInformation")
+    fun getAllAddressInformation(): LiveData<List<AddressInformation>>
+
+    @Update()
+    fun updateAddressInformation(addressInformation: AddressInformation)
 }
 
-@Database(entities = [LocalDishItem::class], version = 1)
+@Database(entities = [LocalDishItem::class,AddressInformation::class], version = 1)
 abstract class LocalDishDatabase: RoomDatabase(){
     abstract fun localDishDao():MenuDao
 }

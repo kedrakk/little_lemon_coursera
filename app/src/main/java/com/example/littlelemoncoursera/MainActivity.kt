@@ -9,8 +9,8 @@ import androidx.room.Room
 import com.example.littlelemoncoursera.application.MenuNetworkData
 import com.example.littlelemoncoursera.application.menuItemToDishItem
 import com.example.littlelemoncoursera.data.local.URL
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.data.local.local_db.LocalDishDatabase
-import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
 import com.example.littlelemoncoursera.ui.LittleLemonMainPage
 import com.example.littlelemoncoursera.ui.theme.LittleLemonCourseraTheme
 import io.ktor.client.HttpClient

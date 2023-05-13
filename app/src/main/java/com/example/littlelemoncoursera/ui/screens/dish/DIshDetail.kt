@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
-import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.localDishDatabase
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
@@ -42,7 +42,7 @@ fun DishDetailPage(
     dishId: Int,
     navController: NavController,
     dishDetailViewModel: DishDetailViewModel,
-    onOrderNow: (List<LocalDishItem>,Int) -> Unit,
+    onOrderNow: (List<LocalDishItem>, Int) -> Unit,
 ) {
     val uiState by dishDetailViewModel.uiState.collectAsState()
     val dish = localDishDatabase.localDishDao().getLocalDishById(dishId).observeAsState().value

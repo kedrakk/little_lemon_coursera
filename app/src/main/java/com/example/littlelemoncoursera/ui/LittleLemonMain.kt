@@ -15,9 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.littlelemoncoursera.data.DishDataRepository
-import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
-import com.example.littlelemoncoursera.localDishDatabase
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes

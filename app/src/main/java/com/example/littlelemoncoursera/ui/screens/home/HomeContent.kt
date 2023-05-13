@@ -24,7 +24,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,15 +31,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
-import com.example.littlelemoncoursera.data.local.local_db.LocalDishItem
-import com.example.littlelemoncoursera.localDishDatabase
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.LogoImage
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
