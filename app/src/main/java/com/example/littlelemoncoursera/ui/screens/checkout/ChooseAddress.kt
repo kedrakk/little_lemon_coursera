@@ -61,6 +61,9 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     val allAddressInformation = viewModel.getAllAddresses().observeAsState(initial = emptyList())
     val checkoutUIState = viewModel.uiState.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
+    var addressId:Int? by remember {
+        mutableStateOf(null)
+    }
     var receiverName by remember {
         mutableStateOf("")
     }
@@ -73,7 +76,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     var selectedAddressType by remember {
         mutableStateOf(AddressType.HOME)
     }
-    var isShowAddress by remember {
+    var isShowAddressForm by remember {
         mutableStateOf(false)
     }
     var receiverNameError by remember {
@@ -84,6 +87,9 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     }
     var fullAddressError by remember {
         mutableStateOf("")
+    }
+    var isUpdateAddress by remember {
+        mutableStateOf(false)
     }
     val context = LocalContext.current
 
@@ -96,14 +102,19 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
             }
         },
         floatingActionButton = {
-            if (!isShowAddress)
+            if (!isShowAddressForm)
                 LocalImageLoader(
                     modifier = Modifier
                         .padding(10.dp)
                         .clip(CircleShape)
                         .background(color = MaterialTheme.colorScheme.primary.copy(alpha = .2F))
                         .clickable {
-                            isShowAddress = true
+                            addressId = null
+                            receiverName = ""
+                            phoneNumber = ""
+                            fullAddress = ""
+                            selectedAddressType = AddressType.HOME
+                            isShowAddressForm = true
                         },
                     painterRes = R.drawable.baseline_add_location_alt_24,
                     imageModifier = Modifier
@@ -112,7 +123,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                 )
         },
         bottomBar = {
-            if (!isShowAddress && checkoutUIState.selectedAddress != null)
+            if (!isShowAddressForm && checkoutUIState.selectedAddress != null)
                 ActionButton(
                     onClick = {
                         navController.navigate(Routes.SELECT_PAYMENT.name)
@@ -121,7 +132,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                 )
         }
     ) { padding ->
-        if (isShowAddress) {
+        if (isShowAddressForm) {
             Box {
                 AddAddressForm(
                     receiverName = receiverName,
@@ -148,20 +159,32 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                             if (fullAddress.emptyValidation()) "Address must be filled" else ""
                         if (receiverNameError.isEmpty() && phoneNumberError.isEmpty() && fullAddressError.isEmpty()) {
                             coroutineScope.launch {
-                                viewModel.addANewAddress(
-                                    AddressInformation(
-                                        addressId = null,
-                                        phoneNumber = phoneNumber,
-                                        receiverName = receiverName,
-                                        addressDetailInformation = fullAddress,
-                                        addressType = selectedAddressType
+                                if(isUpdateAddress){
+                                    viewModel.updateAddress(
+                                        AddressInformation(
+                                            addressId = addressId,
+                                            phoneNumber = phoneNumber,
+                                            receiverName = receiverName,
+                                            addressDetailInformation = fullAddress,
+                                            addressType = selectedAddressType
+                                        )
                                     )
-                                )
-                                isShowAddress = false
+                                }else{
+                                    viewModel.addANewAddress(
+                                        AddressInformation(
+                                            addressId = null,
+                                            phoneNumber = phoneNumber,
+                                            receiverName = receiverName,
+                                            addressDetailInformation = fullAddress,
+                                            addressType = selectedAddressType
+                                        )
+                                    )
+                                }
                             }
+                            isShowAddressForm = false
                             Toast.makeText(
                                 context,
-                                "Save a new address successfully",
+                                if(isUpdateAddress) "Update address successfully" else "Save a new address successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -172,12 +195,13 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                         .padding(padding)
                         .padding(horizontal = 20.dp),
                     onCancelSave = {
-                        isShowAddress = false
+                        isShowAddressForm = false
                     },
                     selectedAddressType = selectedAddressType,
                     onSelectedAddressChange = {
                         selectedAddressType = it
-                    }
+                    },
+                    isUpdateAddress = isUpdateAddress,
                 )
             }
         } else {
@@ -189,10 +213,20 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
             ) {
                 ShowAddressList(
                     addressList = allAddressInformation.value,
-                    selectedAddressInformation = checkoutUIState.selectedAddress
-                ) {
-                    viewModel.onAddressSelect(it)
-                }
+                    selectedAddressInformation = checkoutUIState.selectedAddress,
+                    onAddressSelect = {
+                        viewModel.onAddressSelect(it)
+                    },
+                    onUpdateIconClicked = {
+                        addressId = it.addressId
+                        receiverName = it.receiverName
+                        phoneNumber = it.phoneNumber
+                        fullAddress = it.addressDetailInformation
+                        selectedAddressType = it.addressType
+                        isUpdateAddress = true
+                        isShowAddressForm = true
+                    }
+                )
             }
         }
     }
@@ -214,13 +248,14 @@ fun AddAddressForm(
     modifier: Modifier,
     selectedAddressType: AddressType,
     onSelectedAddressChange: (AddressType) -> Unit,
+    isUpdateAddress: Boolean,
 ) {
     Column(
         modifier = modifier.verticalScroll(rememberScrollState(), reverseScrolling = true),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Add Your Address",
+            text = if (isUpdateAddress) "Update Your Address" else "Add Your Address",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()
@@ -248,7 +283,9 @@ fun AddAddressForm(
         if (receiverNameError.isNotEmpty()) {
             Text(
                 text = "* $receiverNameError",
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = Color.Red,
                     fontSize = 10.sp
@@ -265,7 +302,9 @@ fun AddAddressForm(
         if (phoneNumberError.isNotEmpty()) {
             Text(
                 text = "* $phoneNumberError",
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = Color.Red,
                     fontSize = 10.sp
@@ -284,7 +323,9 @@ fun AddAddressForm(
         if (fullAddressError.isNotEmpty()) {
             Text(
                 text = "* $fullAddressError",
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp),
                 style = MaterialTheme.typography.bodySmall.copy(
                     color = Color.Red,
                     fontSize = 10.sp
@@ -315,7 +356,10 @@ fun AddAddressForm(
                 onSelectedAddressChange(AddressType.OTHERS)
             }
         }
-        ActionButton(onClick = { onSaveAddress() }, label = "Save Address Information")
+        ActionButton(
+            onClick = { onSaveAddress() },
+            label = "Save Address Information"
+        )
         TextButton(onClick = { onCancelSave() }, label = "Cancel")
     }
 }
@@ -332,7 +376,8 @@ fun SelectAddressType(label: String, isSelected: Boolean, onSelect: () -> Unit) 
 fun ShowAddressList(
     addressList: List<AddressInformation>,
     selectedAddressInformation: AddressInformation?,
-    onAddressSelect: (AddressInformation) -> Unit
+    onAddressSelect: (AddressInformation) -> Unit,
+    onUpdateIconClicked:(AddressInformation)->Unit,
 ) {
     LazyColumn() {
         item {
@@ -360,14 +405,22 @@ fun ShowAddressList(
                         modifier = Modifier.padding(end = 5.dp)
                     )
                 }
-                AddressItemCard(addressInformation = addressList[it])
+                AddressItemCard(
+                    addressInformation = addressList[it],
+                    onUpdateIconClicked = {
+                        onUpdateIconClicked(addressList[it])
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun AddressItemCard(addressInformation: AddressInformation) {
+fun AddressItemCard(
+    addressInformation: AddressInformation,
+    onUpdateIconClicked:()->Unit,
+) {
     val iconId = when (addressInformation.addressType) {
         AddressType.HOME -> R.drawable.baseline_home_24
         AddressType.WORK -> R.drawable.baseline_work_24
@@ -425,7 +478,9 @@ fun AddressItemCard(addressInformation: AddressInformation) {
                 )
             }
             IconButton(
-                onClick = {}
+                onClick = {
+                    onUpdateIconClicked()
+                }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_edit_location_24),

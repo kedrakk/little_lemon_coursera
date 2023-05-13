@@ -50,6 +50,11 @@ class CheckoutViewModel() : ViewModel() {
             localDishDatabase.localDishDao().addANewAddress(addressInformation);
         }
 
+    suspend fun updateAddress(addressInformation: AddressInformation) =
+        withContext(Dispatchers.IO) {
+            localDishDatabase.localDishDao().updateAddressInformation(addressInformation);
+        }
+
     fun onAddressSelect(addressInformation: AddressInformation) {
         _uiState.update {
             it.copy(selectedAddress = addressInformation)
