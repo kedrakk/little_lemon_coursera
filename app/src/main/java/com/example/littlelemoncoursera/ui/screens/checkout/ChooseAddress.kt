@@ -50,7 +50,6 @@ import com.example.littlelemoncoursera.ui.screens.components.LocalImageLoader
 import com.example.littlelemoncoursera.ui.screens.components.TextButton
 import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,9 +69,6 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     }
     var selectedAddressType by remember {
         mutableStateOf(AddressType.HOME)
-    }
-    var selectedAddress: AddressInformation? by remember {
-        mutableStateOf(null)
     }
     val context = LocalContext.current
 
@@ -101,7 +97,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                 )
         },
         bottomBar = {
-            if (!checkoutUIState.showAddForm && selectedAddress != null)
+            if (!checkoutUIState.showAddForm && checkoutUIState.selectedAddress != null)
                 ActionButton(
                     onClick = {
                         navController.navigate(Routes.SELECT_PAYMENT.name)
@@ -166,9 +162,9 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
             ) {
                 ShowAddressList(
                     addressList = allAddressInformation.value,
-                    selectedAddressInformation = selectedAddress
+                    selectedAddressInformation = checkoutUIState.selectedAddress
                 ) {
-                    selectedAddress = it
+                    viewModel.onAddressSelect(it)
                 }
             }
         }

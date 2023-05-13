@@ -18,6 +18,24 @@ class CheckoutViewModel():ViewModel() {
     private val _uiState = MutableStateFlow(CheckoutUIState())
     val uiState: StateFlow<CheckoutUIState> = _uiState.asStateFlow()
 
+    fun increaseQty(prevQty:Int,originalPrice:Int){
+        val newQty=prevQty+1
+        _uiState.update {
+            it.copy(
+                selectedQty = newQty, totalPrice =originalPrice*newQty
+            )
+        }
+    }
+
+    fun decreaseQty(prevQty:Int,originalPrice:Int){
+        val newQty=if(prevQty>1) prevQty-1 else prevQty
+        _uiState.update {
+            it.copy(
+                selectedQty = newQty, totalPrice =originalPrice*newQty
+            )
+        }
+    }
+
     fun setItemAndPrice(newItemsList:List<LocalDishItem>, newPrice:Int){
         _uiState.update {
             it.copy(selectedItems = newItemsList, totalPrice = newPrice)
@@ -36,6 +54,12 @@ class CheckoutViewModel():ViewModel() {
     fun showOrHideAddForm(showOrHide:Boolean){
         _uiState.update {
             it.copy(showAddForm = showOrHide)
+        }
+    }
+
+    fun onAddressSelect(addressInformation: AddressInformation){
+        _uiState.update {
+            it.copy(selectedAddress = addressInformation)
         }
     }
 

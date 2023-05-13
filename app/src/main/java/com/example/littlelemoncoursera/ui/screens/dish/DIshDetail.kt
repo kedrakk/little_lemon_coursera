@@ -34,17 +34,17 @@ import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
 import com.example.littlelemoncoursera.ui.screens.components.EmptyPageComponent
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
-import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
+import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DishDetailPage(
     dishId: Int,
     navController: NavController,
-    dishDetailViewModel: DishDetailViewModel,
+    checkoutViewModel: CheckoutViewModel,
     onOrderNow: (List<LocalDishItem>, Int) -> Unit,
 ) {
-    val uiState by dishDetailViewModel.uiState.collectAsState()
+    val uiState by checkoutViewModel.uiState.collectAsState()
     val dish = localDishDatabase.localDishDao().getLocalDishById(dishId).observeAsState().value
         ?: return EmptyPageComponent(message = "Empty Dish")
 
@@ -104,13 +104,13 @@ fun DishDetailPage(
                         currentQty = uiState.selectedQty.toString(),
                         modifier = Modifier.weight(1F),
                         onIncreased = {
-                            dishDetailViewModel.increaseQty(
+                            checkoutViewModel.increaseQty(
                                 prevQty = uiState.selectedQty,
                                 originalPrice = dish.price.toInt()
                             )
                         },
                         onDecreased = {
-                            dishDetailViewModel.decreaseQty(
+                            checkoutViewModel.decreaseQty(
                                 prevQty = uiState.selectedQty,
                                 originalPrice = dish.price.toInt()
                             )

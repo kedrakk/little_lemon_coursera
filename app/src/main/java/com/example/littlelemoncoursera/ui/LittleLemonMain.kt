@@ -30,7 +30,6 @@ import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.viewmodels.category.SearchViewModel
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
-import com.example.littlelemoncoursera.viewmodels.dish.DishDetailViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainUIState
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainViewModel
@@ -141,12 +140,11 @@ fun LittleLemonMainPage(
                     }
                 )
             ) {
-                val dishDetailViewModel = DishDetailViewModel()
                 it.arguments?.getInt(RouteKeys.dishId)?.let { it1 ->
                     DishDetailPage(
                         dishId = it1,
                         navController = navController,
-                        dishDetailViewModel = dishDetailViewModel,
+                        checkoutViewModel = checkoutViewModel,
                         onOrderNow = { dishList, total ->
                             checkoutViewModel.setItemAndPrice(
                                 newItemsList = dishList,
