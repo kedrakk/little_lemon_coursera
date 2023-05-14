@@ -17,17 +17,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,7 +35,7 @@ import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.navigation.Routes
-import com.example.littlelemoncoursera.ui.screens.components.LogoImage
+import com.example.littlelemoncoursera.ui.screens.components.HomeAppBar
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
 import java.util.Locale
 
@@ -88,27 +85,6 @@ fun HomeContent(
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeAppBar(onNavigateToSearchPage: () -> Unit) {
-    TopAppBar(
-        title = {
-            LogoImage(size = 100.dp)
-        },
-        actions = {
-            IconButton(
-                onClick = { onNavigateToSearchPage() }
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.baseline_search_24),
-                    contentDescription = "Search Items",
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
-                )
-            }
-        }
-    )
 }
 
 @Composable

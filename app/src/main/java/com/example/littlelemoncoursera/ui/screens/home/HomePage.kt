@@ -33,6 +33,7 @@ import com.example.littlelemoncoursera.data.local.HomeBottomBarData
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import com.example.littlelemoncoursera.ui.screens.category.CategoryContent
 import com.example.littlelemoncoursera.ui.screens.profile.ProfileContent
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 
@@ -84,7 +85,19 @@ fun HomePage(
                     },
                     selectedCategory = categoryName,
                 )
-                1 -> CategoryContent()
+                1 -> CategoryContent(
+                    navController = navController,
+                    categories = categories.value,
+                    menuItems = localDishes.value,
+                    onCategoryItemClicked = {name->
+                        categoryName = if(categoryName.isNotEmpty() && categoryName==name){
+                            ""
+                        }else{
+                            name
+                        }
+                    },
+                    selectedCategory = categoryName,
+                )
                 2 -> CartContent()
                 3 -> ReservationContent()
                 4 -> ProfileContent(littleLemonUser = littleLemonUser, onLogout = { onLogout() })
@@ -141,16 +154,6 @@ fun HomeBottomBar(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun CategoryContent() {
-    Box(
-        Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Category Content")
     }
 }
 

@@ -41,16 +41,16 @@ fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewMode
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            CommonAppBar(title = "Review Your Order") {
+            CommonAppBar(title = "Review Your Order", onBackClicked = {
                 if (navController.previousBackStackEntry != null) {
                     navController.navigateUp()
                 }
-            }
+            })
         },
         bottomBar = {
             ActionButton(
                 onClick = {
-                    Toast.makeText(context,"Order Success",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Order Success", Toast.LENGTH_SHORT).show()
                     navController.navigate(Routes.HOME.name) {
                         popUpTo(Routes.LOGIN.name) {
                             inclusive = true
@@ -130,7 +130,7 @@ fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewMode
                 iconData = R.drawable.baseline_fastfood_24,
                 body = {
                     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
-                        for (i in 0 until  checkoutUIState.selectedItems.size) {
+                        for (i in 0 until checkoutUIState.selectedItems.size) {
                             Column(
                                 modifier = Modifier.padding(vertical = 5.dp)
                             ) {
@@ -157,14 +157,18 @@ fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewMode
 }
 
 @Composable
-fun TotalPriceItem(total:Int) {
+fun TotalPriceItem(total: Int) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(vertical = 10.dp, horizontal = 10.dp),
         horizontalAlignment = Alignment.End
     ) {
         Text(text = "Total", style = MaterialTheme.typography.bodySmall)
-        Text(text = "$ $total", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold))
+        Text(
+            text = "$ $total",
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
+        )
     }
 }
 

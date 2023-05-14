@@ -95,11 +95,14 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
 
     Scaffold(
         topBar = {
-            CommonAppBar(title = "Confirm Your Address") {
-                if (navController.previousBackStackEntry != null) {
-                    navController.navigateUp()
-                }
-            }
+            CommonAppBar(
+                title = "Confirm Your Address",
+                onBackClicked = {
+                    if (navController.previousBackStackEntry != null) {
+                        navController.navigateUp()
+                    }
+                },
+            )
         },
         floatingActionButton = {
             if (!isShowAddressForm)

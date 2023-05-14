@@ -32,11 +32,14 @@ fun SelectPaymentPage(navController: NavController, viewModel: CheckoutViewModel
     val checkoutUIState = viewModel.uiState.collectAsState().value
     Scaffold(
         topBar = {
-            CommonAppBar(title = "Select Payment") {
-                if (navController.previousBackStackEntry != null) {
-                    navController.navigateUp()
-                }
-            }
+            CommonAppBar(
+                title = "Select Payment",
+                onBackClicked = {
+                    if (navController.previousBackStackEntry != null) {
+                        navController.navigateUp()
+                    }
+                },
+            )
         },
         bottomBar = {
             if(checkoutUIState.selectedPaymentMethod!=null)
