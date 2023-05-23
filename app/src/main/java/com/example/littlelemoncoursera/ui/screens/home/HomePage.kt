@@ -124,7 +124,7 @@ fun HomePage(
 fun HomeBottomBar(
     bottomBarItems: List<HomeBottomBarItems>,
     onItemClick: (Int) -> Unit,
-    activeIndex: Int,
+    activeIndex: Int?,
 ) {
     BottomAppBar(containerColor = MaterialTheme.colorScheme.secondary) {
         Row(

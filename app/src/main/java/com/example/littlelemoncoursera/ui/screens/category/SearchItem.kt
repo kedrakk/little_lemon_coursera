@@ -54,9 +54,9 @@ fun SearchItemPage(navController: NavController, searchViewModel: SearchViewMode
         Box(modifier = Modifier.padding(it)) {
             SearchedItemList(
                 dishesList = localDishes.value,
-                onDishItemClicked = {
+                onDishItemClicked = {dishId->
                     navController.navigateUp()
-                    navController.navigate("${Routes.DISH_DETAIL.name}/$it")
+                    navController.navigate("${Routes.DISH_DETAIL.name}/$dishId")
                 },
 
                 )

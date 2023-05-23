@@ -19,6 +19,7 @@ import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
+import com.example.littlelemoncoursera.ui.screens.category.CategoryContent
 import com.example.littlelemoncoursera.ui.screens.category.SearchItemPage
 import com.example.littlelemoncoursera.ui.screens.checkout.CheckOutReviewPage
 import com.example.littlelemoncoursera.ui.screens.checkout.ChooseAddressInformation
@@ -54,6 +55,7 @@ fun LittleLemonMainPage(
     val context = LocalContext.current
     val checkoutViewModel = CheckoutViewModel()
     var dishItemList:List<LocalDishItem> = listOf()
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
