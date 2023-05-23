@@ -21,14 +21,20 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileContent(littleLemonUser: LittleLemonUser, onLogout: () -> Unit) {
+fun ProfileContent(
+    littleLemonUser: LittleLemonUser,
+    onLogout: () -> Unit,
+    navController: NavController
+) {
     Scaffold(
         topBar = {
             CommonAppBar(
@@ -40,7 +46,13 @@ fun ProfileContent(littleLemonUser: LittleLemonUser, onLogout: () -> Unit) {
     ) {
         Column(modifier = Modifier.padding(it)) {
             UserInformation(littleLemonUser = littleLemonUser)
-            SettingItem(iconData = R.drawable.baseline_edit_24, label = "Edit Profile", onTap = {})
+            SettingItem(
+                iconData = R.drawable.baseline_edit_24,
+                label = "Edit Profile",
+                onTap = {
+                    navController.navigate(Routes.EDIT_PROFILE.name)
+                }
+            )
             SettingItem(
                 iconData = R.drawable.baseline_list_24,
                 label = "View Orders List",
@@ -86,11 +98,7 @@ fun UserInformation(littleLemonUser: LittleLemonUser) {
             .padding(horizontal = 10.dp, vertical = 15.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.profile),
-            contentDescription = littleLemonUser.email,
-            modifier = Modifier.size(80.dp)
-        )
+        UserImageCircleView(userEmail = littleLemonUser.email)
         Column(
             modifier = Modifier.padding(horizontal = 10.dp)
         ) {
@@ -105,6 +113,15 @@ fun UserInformation(littleLemonUser: LittleLemonUser) {
             )
         }
     }
+}
+
+@Composable
+fun UserImageCircleView(userEmail:String="") {
+    Image(
+        painter = painterResource(id = R.drawable.profile),
+        contentDescription = userEmail,
+        modifier = Modifier.size(80.dp)
+    )
 }
 
 @Composable

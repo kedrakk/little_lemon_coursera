@@ -54,6 +54,7 @@ fun TextInputField(
     onPasswordVisibilityChanged: () -> Unit = {},
     isSingleLine:Boolean=true,
     maxLines:Int=1,
+    isEnabled: Boolean = true,
 ) {
     Column(modifier = Modifier.padding(vertical = 12.dp)) {
         Text(
@@ -71,6 +72,7 @@ fun TextInputField(
             isSingleLine = isSingleLine,
             maxLines = maxLines,
             placeholderText = label,
+            isEnabled = isEnabled
         )
     }
 }
@@ -88,6 +90,7 @@ fun LittleLemonTextBox(
     isSingleLine:Boolean=true,
     maxLines:Int=1,
     placeholderText:String,
+    isEnabled:Boolean = true
 ) {
     if(isOutline)
     {
@@ -105,6 +108,7 @@ fun LittleLemonTextBox(
             label={
               Text(text = placeholderText)
             },
+            enabled = isEnabled,
             trailingIcon = {
                 if (isPassword) PasswordVisibility(isVisible = passwordVisible) {
                     onPasswordVisibilityChanged()

@@ -100,7 +100,11 @@ fun HomePage(
                 )
                 2 -> CartContent()
                 3 -> ReservationContent()
-                4 -> ProfileContent(littleLemonUser = littleLemonUser, onLogout = { onLogout() })
+                4 -> ProfileContent(
+                    littleLemonUser = littleLemonUser,
+                    onLogout = { onLogout() },
+                    navController = navController
+                )
                 else -> HomeContent(
                     navController = navController,
                     onSearchClicked = onSearchClicked,

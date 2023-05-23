@@ -29,6 +29,7 @@ import com.example.littlelemoncoursera.ui.screens.home.HomePage
 import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
+import com.example.littlelemoncoursera.ui.screens.profile.EditProfilePage
 import com.example.littlelemoncoursera.viewmodels.category.SearchViewModel
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
@@ -167,6 +168,9 @@ fun LittleLemonMainPage(
             }
             composable(Routes.CHECKOUT_REVIEW.name) {
                 CheckOutReviewPage(navController = navController, viewModel = checkoutViewModel)
+            }
+            composable(Routes.EDIT_PROFILE.name){
+                EditProfilePage(navController = navController, littleLemonUser = uiState.littleLemonUser)
             }
         }
     }
