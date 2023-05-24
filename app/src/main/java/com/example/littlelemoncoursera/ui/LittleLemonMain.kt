@@ -8,12 +8,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -43,7 +41,6 @@ import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainViewModel
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -69,9 +66,9 @@ fun LittleLemonMainPage(
     var dishItemList: List<LocalDishItem> = listOf()
 
     val openDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
-    if(openDialog.value){
+    if (openDialog.value) {
         LoadingDialog {
-            openDialog.value=false
+            openDialog.value = false
         }
     }
 
@@ -87,10 +84,22 @@ fun LittleLemonMainPage(
                 RegisterPage(
                     viewModel = OnboardingViewModel(),
                     onNavigateToHome = {
-                        littleLemonMainViewModel.setUserData(it)
-                        navController.navigate(Routes.HOME.name) {
-                            popUpTo(Routes.REGISTER.name) {
-                                inclusive = true
+                        CoroutineScope(Dispatchers.Default).launch {
+                            // Simulate loading data
+                            openDialog.value = true
+                            littleLemonMainViewModel.setUserData(it)
+                            delay(2000)
+                            openDialog.value = false
+
+                            // Update data on the main thread
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT)
+                                    .show()
+                                navController.navigate(Routes.HOME.name) {
+                                    popUpTo(Routes.REGISTER.name) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         }
                     }, onNavigateToLogin = {
@@ -106,10 +115,22 @@ fun LittleLemonMainPage(
                 LoginPage(
                     viewModel = OnboardingViewModel(),
                     onNavigateToHome = {
-                        littleLemonMainViewModel.setUserData(it)
-                        navController.navigate(Routes.HOME.name) {
-                            popUpTo(Routes.LOGIN.name) {
-                                inclusive = true
+                        CoroutineScope(Dispatchers.Default).launch {
+                            // Simulate loading data
+                            openDialog.value = true
+                            littleLemonMainViewModel.setUserData(it)
+                            delay(2000)
+                            openDialog.value = false
+
+                            // Update data on the main thread
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT)
+                                    .show()
+                                navController.navigate(Routes.HOME.name) {
+                                    popUpTo(Routes.LOGIN.name) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         }
                     },
@@ -127,11 +148,23 @@ fun LittleLemonMainPage(
                     HomeViewModel(),
                     uiState.littleLemonUser,
                     onLogout = {
-                        littleLemonMainViewModel.setUserData(LittleLemonUser("", "", "", ""))
-                        Toast.makeText(context, "Logout Success", Toast.LENGTH_SHORT).show()
-                        navController.navigate(Routes.LOGIN.name) {
-                            popUpTo(Routes.LOGIN.name) {
-                                inclusive = true
+
+
+                        CoroutineScope(Dispatchers.Default).launch {
+                            // Simulate loading data
+                            openDialog.value = true
+                            littleLemonMainViewModel.setUserData(LittleLemonUser("", "", "", ""))
+                            delay(500)
+                            openDialog.value = false
+
+                            // Update data on the main thread
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "Logout Success", Toast.LENGTH_SHORT).show()
+                                navController.navigate(Routes.LOGIN.name) {
+                                    popUpTo(Routes.LOGIN.name) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                         }
                     },
@@ -201,7 +234,8 @@ fun LittleLemonMainPage(
 
                             // Update data on the main thread
                             withContext(Dispatchers.Main) {
-                                Toast.makeText(context, "Edit Profile Success", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Edit Profile Success", Toast.LENGTH_SHORT)
+                                    .show()
                                 navController.navigateUp()
                             }
                         }
