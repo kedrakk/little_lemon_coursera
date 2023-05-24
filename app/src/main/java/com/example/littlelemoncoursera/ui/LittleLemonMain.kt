@@ -6,9 +6,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,6 +24,7 @@ import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
+import com.example.littlelemoncoursera.ui.dialogs.LoadingDialog
 import com.example.littlelemoncoursera.ui.screens.category.SearchItemPage
 import com.example.littlelemoncoursera.ui.screens.checkout.CheckOutReviewPage
 import com.example.littlelemoncoursera.ui.screens.checkout.ChooseAddressInformation
@@ -61,6 +67,13 @@ fun LittleLemonMainPage(
     val context = LocalContext.current
     val checkoutViewModel = CheckoutViewModel()
     var dishItemList: List<LocalDishItem> = listOf()
+
+    val openDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
+    if(openDialog.value){
+        LoadingDialog {
+            openDialog.value=false
+        }
+    }
 
     Surface(
         modifier = Modifier
@@ -181,8 +194,10 @@ fun LittleLemonMainPage(
                     onEditUserInfo = { newUserInfo ->
                         CoroutineScope(Dispatchers.Default).launch {
                             // Simulate loading data
+                            openDialog.value = true
                             littleLemonMainViewModel.setUserData(newUserInfo)
                             delay(2000)
+                            openDialog.value = false
 
                             // Update data on the main thread
                             withContext(Dispatchers.Main) {
