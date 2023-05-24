@@ -19,7 +19,6 @@ import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
-import com.example.littlelemoncoursera.ui.screens.category.CategoryContent
 import com.example.littlelemoncoursera.ui.screens.category.SearchItemPage
 import com.example.littlelemoncoursera.ui.screens.checkout.CheckOutReviewPage
 import com.example.littlelemoncoursera.ui.screens.checkout.ChooseAddressInformation
@@ -36,6 +35,12 @@ import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainUIState
 import com.example.littlelemoncoursera.viewmodels.main.LittleLemonMainViewModel
 import com.example.littlelemoncoursera.viewmodels.onboarding.OnboardingViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LittleLemonMainPage(
@@ -55,7 +60,7 @@ fun LittleLemonMainPage(
     }
     val context = LocalContext.current
     val checkoutViewModel = CheckoutViewModel()
-    var dishItemList:List<LocalDishItem> = listOf()
+    var dishItemList: List<LocalDishItem> = listOf()
 
     Surface(
         modifier = Modifier
@@ -169,8 +174,24 @@ fun LittleLemonMainPage(
             composable(Routes.CHECKOUT_REVIEW.name) {
                 CheckOutReviewPage(navController = navController, viewModel = checkoutViewModel)
             }
-            composable(Routes.EDIT_PROFILE.name){
-                EditProfilePage(navController = navController, littleLemonUser = uiState.littleLemonUser)
+            composable(Routes.EDIT_PROFILE.name) {
+                EditProfilePage(
+                    navController = navController,
+                    littleLemonUser = uiState.littleLemonUser,
+                    onEditUserInfo = { newUserInfo ->
+                        CoroutineScope(Dispatchers.Default).launch {
+                            // Simulate loading data
+                            littleLemonMainViewModel.setUserData(newUserInfo)
+                            delay(2000)
+
+                            // Update data on the main thread
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(context, "Edit Profile Success", Toast.LENGTH_SHORT).show()
+                                navController.navigateUp()
+                            }
+                        }
+                    }
+                )
             }
         }
     }

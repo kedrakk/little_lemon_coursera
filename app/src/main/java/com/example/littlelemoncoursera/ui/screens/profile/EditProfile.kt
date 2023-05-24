@@ -33,7 +33,7 @@ import com.example.littlelemoncoursera.ui.screens.components.TextInputField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUser) {
+fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUser,onEditUserInfo:(LittleLemonUser)->Unit,) {
     var firstNameTextBox by remember {
         mutableStateOf(littleLemonUser.firstName)
     }
@@ -46,7 +46,6 @@ fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUs
     var lastNameError by remember {
         mutableStateOf("")
     }
-    val context = LocalContext.current
     Scaffold(
         topBar = {
             CommonAppBar(
@@ -117,21 +116,13 @@ fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUs
                     lastNameError =
                         if (lastNameTextBox.emptyValidation()) "Last Name must be filled" else ""
                     if (firstNameError.isEmpty() && lastNameError.isEmpty()) {
-                        Toast.makeText(context,"Edit Profile Success",Toast.LENGTH_SHORT).show()
-                        navController.navigateUp()
+                        onEditUserInfo(
+                            LittleLemonUser(firstName = firstNameTextBox, lastName = lastNameTextBox, email = littleLemonUser.email, password = littleLemonUser.password,)
+                        )
                     }
                 },
                 label = "Edit Now"
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun EditProfilePreview() {
-    EditProfilePage(
-        navController = rememberNavController(),
-        littleLemonUser = LittleLemonUser("martin", "odegaard", "kedk@example.com", "password")
-    )
 }
