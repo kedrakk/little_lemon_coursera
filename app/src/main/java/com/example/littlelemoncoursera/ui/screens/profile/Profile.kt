@@ -60,7 +60,10 @@ fun ProfileContent(
             SettingItem(
                 iconData = R.drawable.baseline_edit_location_24,
                 label = "View Address Information",
-                onTap = {})
+                onTap = {
+                    navController.navigate(Routes.VIEW_ADDRESSES.name)
+                }
+            )
             Divider(
                 modifier = Modifier.padding(vertical = 10.dp)
             )

@@ -57,11 +57,15 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavController) {
+fun ChooseAddressInformation(
+    viewModel: CheckoutViewModel,
+    navController: NavController,
+    isFromCheckoutFlow: Boolean = true
+) {
     val allAddressInformation = viewModel.getAllAddresses().observeAsState(initial = emptyList())
     val checkoutUIState = viewModel.uiState.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
-    var addressId:Int? by remember {
+    var addressId: Int? by remember {
         mutableStateOf(null)
     }
     var receiverName by remember {
@@ -96,7 +100,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
     Scaffold(
         topBar = {
             CommonAppBar(
-                title = "Confirm Your Address",
+                title = if(isFromCheckoutFlow) "Confirm Your Address" else "View Addresses Information",
                 onBackClicked = {
                     if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
@@ -126,7 +130,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                 )
         },
         bottomBar = {
-            if (!isShowAddressForm && checkoutUIState.selectedAddress != null)
+            if (isFromCheckoutFlow && !isShowAddressForm && checkoutUIState.selectedAddress != null)
                 ActionButton(
                     onClick = {
                         navController.navigate(Routes.SELECT_PAYMENT.name)
@@ -162,7 +166,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                             if (fullAddress.emptyValidation()) "Address must be filled" else ""
                         if (receiverNameError.isEmpty() && phoneNumberError.isEmpty() && fullAddressError.isEmpty()) {
                             coroutineScope.launch {
-                                if(isUpdateAddress){
+                                if (isUpdateAddress) {
                                     viewModel.updateAddress(
                                         AddressInformation(
                                             addressId = addressId,
@@ -172,7 +176,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                                             addressType = selectedAddressType
                                         )
                                     )
-                                }else{
+                                } else {
                                     viewModel.addANewAddress(
                                         AddressInformation(
                                             addressId = null,
@@ -187,7 +191,7 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                             isShowAddressForm = false
                             Toast.makeText(
                                 context,
-                                if(isUpdateAddress) "Update address successfully" else "Save a new address successfully",
+                                if (isUpdateAddress) "Update address successfully" else "Save a new address successfully",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -228,7 +232,8 @@ fun ChooseAddressInformation(viewModel: CheckoutViewModel, navController: NavCon
                         selectedAddressType = it.addressType
                         isUpdateAddress = true
                         isShowAddressForm = true
-                    }
+                    },
+                    isFromCheckoutFlow = isFromCheckoutFlow
                 )
             }
         }
@@ -380,9 +385,11 @@ fun ShowAddressList(
     addressList: List<AddressInformation>,
     selectedAddressInformation: AddressInformation?,
     onAddressSelect: (AddressInformation) -> Unit,
-    onUpdateIconClicked:(AddressInformation)->Unit,
+    onUpdateIconClicked: (AddressInformation) -> Unit,
+    isFromCheckoutFlow: Boolean,
 ) {
     LazyColumn() {
+        if(isFromCheckoutFlow)
         item {
             Text(
                 text = "Select Your Address",
@@ -397,6 +404,7 @@ fun ShowAddressList(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                if(isFromCheckoutFlow)
                 IconButton(
                     onClick = { onAddressSelect(addressList[it]) }
                 ) {
@@ -422,7 +430,7 @@ fun ShowAddressList(
 @Composable
 fun AddressItemCard(
     addressInformation: AddressInformation,
-    onUpdateIconClicked:()->Unit,
+    onUpdateIconClicked: () -> Unit,
 ) {
     val iconId = when (addressInformation.addressType) {
         AddressType.HOME -> R.drawable.baseline_home_24

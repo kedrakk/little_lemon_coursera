@@ -33,6 +33,7 @@ import com.example.littlelemoncoursera.ui.screens.onboarding.LoginPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.profile.EditProfilePage
+import com.example.littlelemoncoursera.ui.screens.profile.ViewAddressPage
 import com.example.littlelemoncoursera.viewmodels.category.SearchViewModel
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
@@ -240,6 +241,12 @@ fun LittleLemonMainPage(
                             }
                         }
                     }
+                )
+            }
+            composable(Routes.VIEW_ADDRESSES.name) {
+                ViewAddressPage(
+                    viewModel = checkoutViewModel,
+                    navController = navController
                 )
             }
         }
