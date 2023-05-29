@@ -35,6 +35,7 @@ import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.ui.screens.category.CategoryContent
 import com.example.littlelemoncoursera.ui.screens.profile.ProfileContent
+import com.example.littlelemoncoursera.ui.screens.reservation.ReservationContent
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -168,16 +169,6 @@ fun CartContent() {
         contentAlignment = Alignment.Center
     ) {
         Text(text = "Cart Content")
-    }
-}
-
-@Composable
-fun ReservationContent() {
-    Box(
-        Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Reservation Content")
     }
 }
 
