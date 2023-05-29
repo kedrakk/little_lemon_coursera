@@ -19,14 +19,21 @@ import com.example.littlelemoncoursera.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QtySelectorComponent() {
+fun QtySelectorComponent(
+    selectedPersonCount: Int,
+    onDecreased: (Int) -> Unit,
+    onIncreased: (Int) -> Unit
+) {
     OutlinedTextField(
-        value = "1",
+        value = "$selectedPersonCount Person",
         readOnly = true,
         onValueChange = {},
         leadingIcon = {
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    val newValue = selectedPersonCount - 1
+                    onDecreased(newValue)
+                },
                 modifier = Modifier
                     .padding(start = 5.dp)
                     .border(
@@ -45,8 +52,10 @@ fun QtySelectorComponent() {
         },
         trailingIcon = {
             IconButton(
-                onClick = { /*TODO*/ },
-                // colors = IconButtonDefaults.filledIconButtonColors(containerColor = MaterialTheme.colorScheme.primary),
+                onClick = {
+                    val newValue = selectedPersonCount + 1
+                    onIncreased(newValue)
+                },
                 modifier = Modifier
                     .padding(end = 5.dp)
                     .border(
@@ -64,7 +73,7 @@ fun QtySelectorComponent() {
                 )
             }
         },
-        textStyle = MaterialTheme.typography.titleLarge.copy(textAlign = TextAlign.Center),
+        textStyle = MaterialTheme.typography.titleMedium.copy(textAlign = TextAlign.Center),
         modifier = Modifier.fillMaxWidth()
     )
 }

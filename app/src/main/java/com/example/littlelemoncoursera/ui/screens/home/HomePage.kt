@@ -37,6 +37,7 @@ import com.example.littlelemoncoursera.ui.screens.category.CategoryContent
 import com.example.littlelemoncoursera.ui.screens.profile.ProfileContent
 import com.example.littlelemoncoursera.ui.screens.reservation.ReservationContent
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
+import com.example.littlelemoncoursera.viewmodels.rsvn.ReservationViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,7 +101,7 @@ fun HomePage(
                     selectedCategory = categoryName,
                 )
                 2 -> CartContent()
-                3 -> ReservationContent()
+                3 -> ReservationContent(viewModel = ReservationViewModel())
                 4 -> ProfileContent(
                     littleLemonUser = littleLemonUser,
                     onLogout = { onLogout() },
