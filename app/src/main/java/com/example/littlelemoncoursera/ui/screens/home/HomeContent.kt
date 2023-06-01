@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,7 +48,7 @@ fun HomeContent(
     categories: List<String>,
     menuItems: List<LocalDishItem>,
     onCategoryItemClicked: (String) -> Unit,
-    selectedCategory:String,
+    selectedCategory: String,
 ) {
 
     Scaffold(
@@ -170,7 +171,11 @@ fun SearchBoxOnHero(onSearch: () -> Unit) {
 }
 
 @Composable
-fun OrderForDelivery(categories: List<String>, onCategoryItemClicked: (String) -> Unit,selectedCategory: String) {
+fun OrderForDelivery(
+    categories: List<String>,
+    onCategoryItemClicked: (String) -> Unit,
+    selectedCategory: String
+) {
     Column(
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 20.dp)
     ) {
@@ -199,12 +204,20 @@ fun OrderForDelivery(categories: List<String>, onCategoryItemClicked: (String) -
 }
 
 @Composable
-fun CategoryPill(label: String, onCategoryItemClicked: (String) -> Unit,isSelected:Boolean) {
+fun CategoryPill(
+    label: String,
+    onCategoryItemClicked: (String) -> Unit,
+    isSelected: Boolean,
+    paddingModifier: Modifier = Modifier
+        .padding(end = 10.dp),
+    roundPercentage:Int = 50
+) {
     Surface(
-        color = if(isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = .3F),
-        modifier = Modifier
-            .padding(end = 10.dp)
-            .clip(RoundedCornerShape(50))
+        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(
+            alpha = .3F
+        ),
+        modifier = paddingModifier
+            .clip(RoundedCornerShape(roundPercentage))
             .clickable {
                 onCategoryItemClicked(label)
             },
@@ -213,7 +226,7 @@ fun CategoryPill(label: String, onCategoryItemClicked: (String) -> Unit,isSelect
             text = label.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
             style = MaterialTheme.typography.bodySmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = if(isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
             ),
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
         )

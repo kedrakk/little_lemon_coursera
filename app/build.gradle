@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.littlelemoncoursera"
-        minSdk 24
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -64,6 +64,7 @@ dependencies {
     implementation "androidx.datastore:datastore-preferences:1.0.0"
     implementation 'androidx.compose.runtime:runtime-livedata:1.4.2'
     implementation "com.github.bumptech.glide:compose:1.0.0-alpha.1"
+    implementation 'com.kizitonwose.calendar:compose:2.3.0'
 
     implementation 'io.ktor:ktor-client-android:2.1.3'
     implementation "io.ktor:ktor-client-content-negotiation:2.1.3"
