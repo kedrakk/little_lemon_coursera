@@ -34,7 +34,7 @@ import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationContent(viewModel: ReservationViewModel) {
+fun ReservationContent(viewModel: ReservationViewModel,onReserve:()->Unit) {
     val uiState = viewModel.uiState.collectAsState().value
     val context = LocalContext.current
     Scaffold(
@@ -53,6 +53,7 @@ fun ReservationContent(viewModel: ReservationViewModel) {
                     onClick = {
                         viewModel.onReserve()
                         Toast.makeText(context, "Reservation Success", Toast.LENGTH_SHORT).show()
+                        onReserve()
                     },
                     label = "Book For ${uiState.currentSelectPerson} on ${uiState.selectedTime}, $dateFormat",
                     verticalPadding = 10

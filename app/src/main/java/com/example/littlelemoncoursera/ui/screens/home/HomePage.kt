@@ -101,7 +101,12 @@ fun HomePage(
                     selectedCategory = categoryName,
                 )
                 2 -> CartContent()
-                3 -> ReservationContent(viewModel = ReservationViewModel())
+                3 -> ReservationContent(
+                    viewModel = ReservationViewModel(),
+                    onReserve = {
+                        homeViewModel.changeIndex(0)
+                    }
+                )
                 4 -> ProfileContent(
                     littleLemonUser = littleLemonUser,
                     onLogout = { onLogout() },
