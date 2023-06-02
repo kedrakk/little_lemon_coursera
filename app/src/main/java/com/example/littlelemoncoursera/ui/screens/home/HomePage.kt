@@ -33,9 +33,11 @@ import com.example.littlelemoncoursera.data.local.HomeBottomBarData
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.HomeBottomBarItems
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import com.example.littlelemoncoursera.ui.screens.cart.CartContent
 import com.example.littlelemoncoursera.ui.screens.category.CategoryContent
 import com.example.littlelemoncoursera.ui.screens.profile.ProfileContent
 import com.example.littlelemoncoursera.ui.screens.reservation.ReservationContent
+import com.example.littlelemoncoursera.viewmodels.cart.CartViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
 import com.example.littlelemoncoursera.viewmodels.rsvn.ReservationViewModel
 
@@ -100,7 +102,7 @@ fun HomePage(
                     },
                     selectedCategory = categoryName,
                 )
-                2 -> CartContent()
+                2 -> CartContent(CartViewModel())
                 3 -> ReservationContent(
                     viewModel = ReservationViewModel(),
                     onReserve = {
@@ -168,15 +170,7 @@ fun HomeBottomBar(
     }
 }
 
-@Composable
-fun CartContent() {
-    Box(
-        Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = "Cart Content")
-    }
-}
+
 
 @Preview
 @Composable

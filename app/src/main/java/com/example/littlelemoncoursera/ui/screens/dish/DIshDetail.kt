@@ -1,11 +1,13 @@
 package com.example.littlelemoncoursera.ui.screens.dish
 
+import android.util.Size
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,13 +24,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.localDishDatabase
+import com.example.littlelemoncoursera.model.CartItem
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
@@ -43,6 +48,7 @@ fun DishDetailPage(
     navController: NavController,
     checkoutViewModel: CheckoutViewModel,
     onOrderNow: (List<LocalDishItem>, Int) -> Unit,
+    onAddToCart: (CartItem) -> Unit,
 ) {
     val uiState by checkoutViewModel.uiState.collectAsState()
     val dish = localDishDatabase.localDishDao().getLocalDishById(dishId).observeAsState().value
@@ -76,7 +82,14 @@ fun DishDetailPage(
                     verticalPadding = 10
                 )
                 ActionButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        onAddToCart(
+                            CartItem(
+                                localDishItem = dish,
+                                quantity = uiState.selectedQty
+                            )
+                        )
+                    },
                     label = "Add To Cart",
                     isOutline = true,
                     verticalPadding = 10
@@ -104,7 +117,7 @@ fun DishDetailPage(
                 ) {
                     SelectDishQty(
                         currentQty = uiState.selectedQty.toString(),
-                        modifier = Modifier.weight(1F),
+                        modifier = Modifier.weight(1F).padding(horizontal = 15.dp, vertical = 20.dp),
                         onIncreased = {
                             checkoutViewModel.increaseQty(
                                 prevQty = uiState.selectedQty,
@@ -177,33 +190,40 @@ fun SelectDishQty(
     modifier: Modifier,
     onIncreased: () -> Unit,
     onDecreased: () -> Unit,
+    iconSize: Dp = 24.dp,
+    textStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    iconModifier: Modifier = Modifier.padding(0.dp)
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .padding(horizontal = 15.dp, vertical = 20.dp)
-            .border(1.dp, Color.Gray, CutCornerShape(2.dp)),
+        modifier = modifier.border(1.dp, Color.Gray, CutCornerShape(2.dp)),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         IconButton(
-            onClick = { onIncreased() }
+            onClick = { onIncreased() },
+            modifier = iconModifier
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_add_24),
-                contentDescription = "Add"
+                contentDescription = "Add",
+                modifier = Modifier.size(iconSize)
             )
         }
         Text(
             text = currentQty,
-            style = MaterialTheme.typography.titleLarge.copy(
+            style = textStyle.copy(
                 fontWeight = FontWeight.Bold
             ),
             modifier = Modifier.padding(horizontal = 10.dp)
         )
-        IconButton(onClick = { onDecreased() }) {
+        IconButton(
+            onClick = { onDecreased() },
+            modifier = iconModifier
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_remove_24),
-                contentDescription = "Remove"
+                contentDescription = "Remove",
+                modifier = Modifier.size(iconSize)
             )
         }
     }

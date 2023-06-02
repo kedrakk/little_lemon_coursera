@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.littlelemoncoursera.cartItems
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
@@ -205,6 +206,11 @@ fun LittleLemonMainPage(
                                 newItemsList = dishList,
                                 newPrice = total
                             )
+                        },
+                        onAddToCart = {cartItem->
+                            cartItems.add(cartItem)
+                            Toast.makeText(context,"Added to Cart",Toast.LENGTH_SHORT).show()
+                            navController.navigateUp()
                         }
                     )
                 }

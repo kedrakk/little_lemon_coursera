@@ -6,12 +6,15 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.littlelemoncoursera.data.UserPreferenceRepository
+import com.example.littlelemoncoursera.model.CartItem
 
 //user preference configs
 private const val USER_PREFERENCE_NAME = "user_preferences"
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
     name = USER_PREFERENCE_NAME
 )
+
+val cartItems:MutableList<CartItem> = mutableListOf()
 
 class LittleLemonApplication:Application() {
     lateinit var userPreferenceRepository: UserPreferenceRepository
