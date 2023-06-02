@@ -59,6 +59,7 @@ fun DishDetailPage(
             CommonAppBar(
                 title = dish.title,
                 onBackClicked = {
+                    checkoutViewModel.decreaseQty(1,dish.price.toInt())
                     if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
                     }
@@ -69,7 +70,7 @@ fun DishDetailPage(
             Column() {
                 ActionButton(
                     onClick = {
-                        val dishList: MutableList<LocalDishItem> = mutableListOf<LocalDishItem>()
+                        val dishList: MutableList<LocalDishItem> = mutableListOf()
                         var totalPrice = 0
                         for (i in 1..uiState.selectedQty) {
                             dishList.add(dish)
