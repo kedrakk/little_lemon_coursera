@@ -177,7 +177,14 @@ fun LittleLemonMainPage(
                         dishItemList = it
                         navController.navigate(Routes.SEARCH.name)
                     },
-                    cartViewModel = CartViewModel()
+                    cartViewModel = CartViewModel(),
+                    onCheckoutFromCart = {dishList,total->
+                        checkoutViewModel.setItemAndPrice(
+                            newItemsList = dishList,
+                            newPrice = total
+                        )
+                        navController.navigate(Routes.ADDRESS_CONFIRM.name)
+                    }
                 )
             }
             composable(Routes.SPLASH.name) {

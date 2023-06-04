@@ -26,7 +26,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.CartItem
+import com.example.littlelemoncoursera.ui.screens.components.ActionButton
 import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
 import com.example.littlelemoncoursera.ui.screens.components.NetworkImageLoader
 import com.example.littlelemoncoursera.ui.screens.dish.SelectDishQty
@@ -34,7 +36,7 @@ import com.example.littlelemoncoursera.viewmodels.cart.CartViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartContent(cartViewModel: CartViewModel) {
+fun CartContent(cartViewModel: CartViewModel,onCheckoutFromCart:(List<LocalDishItem>, Int)->Unit) {
     val cartUiState by cartViewModel.uiState.collectAsState()
     val context = LocalContext.current
 
@@ -45,6 +47,19 @@ fun CartContent(cartViewModel: CartViewModel) {
                 onBackClicked = { /*TODO*/ },
                 isBackIconContains = false
             )
+        },
+        bottomBar = {
+            if (cartUiState.selectedCartItems.isNotEmpty()) {
+                ActionButton(
+                    onClick = {
+                        val selectedDishItems = cartViewModel.convertDishItems(cartUiState.selectedCartItems)
+                        val total = cartViewModel.getTotal(cartUiState.selectedCartItems)
+                        onCheckoutFromCart(selectedDishItems,total)
+                    },
+                    label = "Checkout Now",
+                    verticalPadding = 10
+                )
+            }
         }
     ) {
         if (cartUiState.emptyText.isNotEmpty()) {

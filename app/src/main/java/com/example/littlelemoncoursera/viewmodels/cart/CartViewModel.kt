@@ -1,13 +1,9 @@
 package com.example.littlelemoncoursera.viewmodels.cart
 
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.littlelemoncoursera.cartItems
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
-import com.example.littlelemoncoursera.localDishDatabase
 import com.example.littlelemoncoursera.model.CartItem
-import com.example.littlelemoncoursera.viewmodels.category.SearchUIState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,5 +35,23 @@ class CartViewModel:ViewModel() {
         _uiState.update {
             it.copy(selectedCartItems = cartItems,  emptyText = emptyText)
         }
+    }
+
+    fun convertDishItems(selectedDishItems: MutableList<CartItem>): List<LocalDishItem> {
+        val tempDishItems: MutableList<LocalDishItem> = mutableListOf()
+        for (element in selectedDishItems){
+            for (count in 1..element.quantity){
+                tempDishItems.add(element.localDishItem)
+            }
+        }
+        return tempDishItems.toList()
+    }
+
+    fun getTotal(selectedDishItems: MutableList<CartItem>):Int{
+        var total = 0;
+        for (element in selectedDishItems){
+            total += element.quantity * element.localDishItem.price.toInt()
+        }
+        return total
     }
 }
