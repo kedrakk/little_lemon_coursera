@@ -1,8 +1,11 @@
 package com.example.littlelemoncoursera.ui.screens.cart
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,6 +21,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -30,8 +35,10 @@ import com.example.littlelemoncoursera.viewmodels.cart.CartViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartContent(cartViewModel: CartViewModel) {
-    val uiState by cartViewModel.uiState.collectAsState()
-   return Scaffold(
+    val cartUiState by cartViewModel.uiState.collectAsState()
+    val context = LocalContext.current
+
+    return Scaffold(
         topBar = {
             CommonAppBar(
                 title = "Cart Items",
@@ -40,21 +47,66 @@ fun CartContent(cartViewModel: CartViewModel) {
             )
         }
     ) {
-        LazyColumn(
-            content = {
-                items(uiState.cartItemList){item->
-                    CartItemComponent(dishItem = item)
-                }
-            },
-            modifier = Modifier
-                .padding(it)
-                .padding(horizontal = 15.dp)
-        )
+        if (cartUiState.emptyText.isNotEmpty()) {
+            Box(
+                modifier = Modifier.padding(it).fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(text = cartUiState.emptyText, color = MaterialTheme.colorScheme.secondary)
+            }
+        } else {
+            LazyColumn(
+                content = {
+                    items(cartUiState.selectedCartItems) { item ->
+                        CartItemComponent(
+                            dishItem = item,
+                            onIncreaseItemQty = {
+                                if (item.quantity < 5) {
+                                    cartViewModel.changeQTY(
+                                        item = item,
+                                        isIncrease = true,
+                                        itemCount = cartUiState.itemCount
+                                    )
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "Please select at most five items",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            },
+                            onDecreaseItemQty = {
+                                if (item.quantity > 1) {
+                                    cartViewModel.changeQTY(
+                                        item = item,
+                                        isIncrease = false,
+                                        itemCount = cartUiState.itemCount
+                                    )
+                                } else {
+                                    cartViewModel.removeItemFromCart(
+                                        item,
+                                    )
+                                }
+                            },
+                            itemPrice = item.localDishItem.price.toInt() * item.quantity
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .padding(it)
+                    .padding(horizontal = 15.dp)
+            )
+        }
     }
 }
 
 @Composable
-fun CartItemComponent(dishItem: CartItem) {
+fun CartItemComponent(
+    dishItem: CartItem,
+    onIncreaseItemQty: () -> Unit,
+    onDecreaseItemQty: () -> Unit,
+    itemPrice: Int,
+) {
     Column(modifier = Modifier.padding(top = 10.dp)) {
         Row(
             verticalAlignment = Alignment.Top
@@ -89,7 +141,7 @@ fun CartItemComponent(dishItem: CartItem) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "$" + dishItem.localDishItem.price,
+                        text = "$$itemPrice",
                         style = MaterialTheme.typography.bodyLarge.copy(
                             fontWeight = FontWeight.Bold,
                         ),
@@ -99,10 +151,10 @@ fun CartItemComponent(dishItem: CartItem) {
                         currentQty = dishItem.quantity.toString(),
                         modifier = Modifier.padding(1.dp),
                         onIncreased = {
-
+                            onIncreaseItemQty()
                         },
                         onDecreased = {
-
+                            onDecreaseItemQty()
                         },
                         iconSize = 18.dp,
                         iconModifier = Modifier.size(35.dp),

@@ -17,6 +17,12 @@ class CheckoutViewModel() : ViewModel() {
     private val _uiState = MutableStateFlow(CheckoutUIState())
     val uiState: StateFlow<CheckoutUIState> = _uiState.asStateFlow()
 
+    fun setDefaultQty(){
+        _uiState.update {
+            it.copy(selectedQty = 1)
+        }
+    }
+
     fun increaseQty(prevQty: Int, originalPrice: Int) {
         val newQty = prevQty + 1
         _uiState.update {

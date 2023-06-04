@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.littlelemoncoursera.cartItems
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
+import com.example.littlelemoncoursera.model.CartItem
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
@@ -35,6 +36,7 @@ import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.profile.EditProfilePage
 import com.example.littlelemoncoursera.ui.screens.profile.ViewAddressPage
+import com.example.littlelemoncoursera.viewmodels.cart.CartViewModel
 import com.example.littlelemoncoursera.viewmodels.category.SearchViewModel
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
 import com.example.littlelemoncoursera.viewmodels.home.HomeViewModel
@@ -174,7 +176,8 @@ fun LittleLemonMainPage(
                     onSearchClicked = {
                         dishItemList = it
                         navController.navigate(Routes.SEARCH.name)
-                    }
+                    },
+                    cartViewModel = CartViewModel()
                 )
             }
             composable(Routes.SPLASH.name) {
@@ -208,8 +211,13 @@ fun LittleLemonMainPage(
                             )
                         },
                         onAddToCart = {cartItem->
-                            cartItems.add(cartItem)
-                            Toast.makeText(context,"Added to Cart",Toast.LENGTH_SHORT).show()
+                            val isAlreadyInCart = cartItems.find {data-> data.localDishItem.id == cartItem.localDishItem.id }
+                            if(isAlreadyInCart==null){
+                                cartItems.add(cartItem)
+                                Toast.makeText(context,"Added to Cart",Toast.LENGTH_SHORT).show()
+                            }else{
+                                Toast.makeText(context,"Already in Cart",Toast.LENGTH_SHORT).show()
+                            }
                             navController.navigateUp()
                         }
                     )

@@ -59,7 +59,7 @@ fun DishDetailPage(
             CommonAppBar(
                 title = dish.title,
                 onBackClicked = {
-                    checkoutViewModel.decreaseQty(1,dish.price.toInt())
+                    checkoutViewModel.setDefaultQty()
                     if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
                     }
@@ -90,6 +90,7 @@ fun DishDetailPage(
                                 quantity = uiState.selectedQty
                             )
                         )
+                        checkoutViewModel.setDefaultQty()
                     },
                     label = "Add To Cart",
                     isOutline = true,

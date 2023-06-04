@@ -4,5 +4,5 @@ import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 
 data class CartItem(
     val localDishItem: LocalDishItem,
-    val quantity:Int
+    var quantity:Int
 )

@@ -49,6 +49,7 @@ fun HomePage(
     onLogout: () -> Unit,
     navController: NavController,
     onSearchClicked: (dishDataList:List<LocalDishItem>) -> Unit,
+    cartViewModel: CartViewModel
 ) {
     var categoryName by remember {
         mutableStateOf("")
@@ -102,7 +103,7 @@ fun HomePage(
                     },
                     selectedCategory = categoryName,
                 )
-                2 -> CartContent(CartViewModel())
+                2 -> CartContent(cartViewModel = cartViewModel)
                 3 -> ReservationContent(
                     viewModel = ReservationViewModel(),
                     onReserve = {
