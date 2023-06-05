@@ -36,7 +36,8 @@ fun CommonAppBar(
                 IconButton(onClick = { onBackClicked() }) {
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_back_24),
-                        contentDescription = "Back"
+                        contentDescription = "Back",
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
                     )
                 }
         },
