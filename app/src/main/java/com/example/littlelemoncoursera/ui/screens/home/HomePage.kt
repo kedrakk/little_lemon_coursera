@@ -50,7 +50,9 @@ fun HomePage(
     navController: NavController,
     onSearchClicked: (dishDataList:List<LocalDishItem>) -> Unit,
     cartViewModel: CartViewModel,
-    onCheckoutFromCart:(List<LocalDishItem>, Int)->Unit
+    onCheckoutFromCart:(List<LocalDishItem>, Int)->Unit,
+    onThemeChange:(Boolean) -> Unit,
+    isDarkTheme:Boolean,
 ) {
     var categoryName by remember {
         mutableStateOf("")
@@ -117,7 +119,9 @@ fun HomePage(
                 4 -> ProfileContent(
                     littleLemonUser = littleLemonUser,
                     onLogout = { onLogout() },
-                    navController = navController
+                    navController = navController,
+                    isDarkTheme = isDarkTheme,
+                    onThemeChange = onThemeChange
                 )
                 else -> HomeContent(
                     navController = navController,

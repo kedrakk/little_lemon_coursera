@@ -65,9 +65,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            LittleLemonCourseraTheme {
-                LittleLemonMainPage()
-            }
+            LittleLemonMainPage()
         }
     }
 }

@@ -3,10 +3,13 @@ package com.example.littlelemoncoursera.data
 import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import com.example.littlelemoncoursera.model.LittleLemonUserWithAppTheme
+import com.example.littlelemoncoursera.model.MyAppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -18,6 +21,7 @@ class UserPreferenceRepository(private val dataStore: DataStore<Preferences>) {
         val LAST_NAME = stringPreferencesKey("last_name")
         val EMAIL = stringPreferencesKey("email")
         val PASSWORD = stringPreferencesKey("password")
+        val ISDARKMODE = booleanPreferencesKey("is_dark_mode")
         const val TAG = "UserPreferencesRepo"
     }
 
@@ -30,7 +34,13 @@ class UserPreferenceRepository(private val dataStore: DataStore<Preferences>) {
         }
     }
 
-    val littleLemonUser:Flow<LittleLemonUser> = dataStore.data.catch {
+    suspend fun saveThemeData(appTheme: MyAppTheme){
+        dataStore.edit {prefs->
+            prefs[ISDARKMODE] = appTheme.isDarkMode
+        }
+    }
+
+    val littleLemonUserWithAppTheme:Flow<LittleLemonUserWithAppTheme> = dataStore.data.catch {
         if(it is IOException) {
             Log.e(TAG, "Error reading preferences.", it)
             emit(emptyPreferences())
@@ -38,11 +48,43 @@ class UserPreferenceRepository(private val dataStore: DataStore<Preferences>) {
             throw it
         }
     }.map {
-        LittleLemonUser(
-            firstName = it[FIRST_NAME] ?: "",
-            lastName = it[LAST_NAME] ?: "",
-            email = it[EMAIL] ?: "",
-            password = it[PASSWORD] ?: ""
+        LittleLemonUserWithAppTheme(
+            littleLemonUser = LittleLemonUser(
+                firstName = it[FIRST_NAME] ?: "",
+                lastName = it[LAST_NAME] ?: "",
+                email = it[EMAIL] ?: "",
+                password = it[PASSWORD] ?: ""
+            ),
+            myAppTheme = MyAppTheme(isDarkMode = it[ISDARKMODE]?:false)
         )
     }
+
+//    val littleLemonUser:Flow<LittleLemonUser> = dataStore.data.catch {
+//        if(it is IOException) {
+//            Log.e(TAG, "Error reading preferences.", it)
+//            emit(emptyPreferences())
+//        } else {
+//            throw it
+//        }
+//    }.map {
+//        LittleLemonUser(
+//            firstName = it[FIRST_NAME] ?: "",
+//            lastName = it[LAST_NAME] ?: "",
+//            email = it[EMAIL] ?: "",
+//            password = it[PASSWORD] ?: ""
+//        )
+//    }
+//
+//    val myAppTheme:Flow<MyAppTheme> = dataStore.data.catch {
+//        if(it is IOException) {
+//            Log.e(TAG, "Error reading preferences.", it)
+//            emit(emptyPreferences())
+//        } else {
+//            throw it
+//        }
+//    }.map {
+//        MyAppTheme(
+//            isDarkMode = it[ISDARKMODE]?:false
+//        )
+//    }
 }

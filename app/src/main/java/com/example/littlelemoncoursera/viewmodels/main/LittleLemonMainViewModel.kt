@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.littlelemoncoursera.LittleLemonApplication
 import com.example.littlelemoncoursera.data.UserPreferenceRepository
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import com.example.littlelemoncoursera.model.MyAppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -30,9 +31,9 @@ class LittleLemonMainViewModel(private val userPreferenceRepository: UserPrefere
     }
 
     val uiState: StateFlow<LittleLemonMainUIState> =
-        userPreferenceRepository.littleLemonUser.map { user ->
+        userPreferenceRepository.littleLemonUserWithAppTheme.map { userWithTheme ->
             delay(3000L)
-            LittleLemonMainUIState(user, isLoading = false,)
+            LittleLemonMainUIState(userWithTheme.littleLemonUser, isLoading = false,isDarkMode = userWithTheme.myAppTheme.isDarkMode)
         }
             .stateIn(
                 scope = viewModelScope,
@@ -43,6 +44,12 @@ class LittleLemonMainViewModel(private val userPreferenceRepository: UserPrefere
     fun setUserData(littleLemonUser: LittleLemonUser) {
         viewModelScope.launch {
             userPreferenceRepository.saveLayoutPreference(littleLemonUser)
+        }
+    }
+
+    fun changeTheme(newThemeData:MyAppTheme){
+        viewModelScope.launch {
+            userPreferenceRepository.saveThemeData(newThemeData)
         }
     }
 }

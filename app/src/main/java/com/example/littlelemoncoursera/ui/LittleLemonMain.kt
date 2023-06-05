@@ -22,6 +22,7 @@ import com.example.littlelemoncoursera.cartItems
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.CartItem
 import com.example.littlelemoncoursera.model.LittleLemonUser
+import com.example.littlelemoncoursera.model.MyAppTheme
 import com.example.littlelemoncoursera.navigation.RouteKeys
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.dialogs.LoadingDialog
@@ -36,6 +37,7 @@ import com.example.littlelemoncoursera.ui.screens.onboarding.RegisterPage
 import com.example.littlelemoncoursera.ui.screens.onboarding.SplashPage
 import com.example.littlelemoncoursera.ui.screens.profile.EditProfilePage
 import com.example.littlelemoncoursera.ui.screens.profile.ViewAddressPage
+import com.example.littlelemoncoursera.ui.theme.LittleLemonCourseraTheme
 import com.example.littlelemoncoursera.viewmodels.cart.CartViewModel
 import com.example.littlelemoncoursera.viewmodels.category.SearchViewModel
 import com.example.littlelemoncoursera.viewmodels.checkout.CheckoutViewModel
@@ -76,199 +78,218 @@ fun LittleLemonMainPage(
         }
     }
 
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .fillMaxWidth()
-            .fillMaxHeight()
+    LittleLemonCourseraTheme(
+        darkTheme = uiState.isDarkMode
     ) {
-        val navController = rememberNavController()
-        NavHost(navController = navController, startDestination = newDestination) {
-            composable(Routes.REGISTER.name) {
-                RegisterPage(
-                    viewModel = OnboardingViewModel(),
-                    onNavigateToHome = {
-                        CoroutineScope(Dispatchers.Default).launch {
-                            // Simulate loading data
-                            openDialog.value = true
-                            littleLemonMainViewModel.setUserData(it)
-                            delay(2000)
-                            openDialog.value = false
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            val navController = rememberNavController()
+            NavHost(navController = navController, startDestination = newDestination) {
+                composable(Routes.REGISTER.name) {
+                    RegisterPage(
+                        viewModel = OnboardingViewModel(),
+                        onNavigateToHome = {
+                            CoroutineScope(Dispatchers.Default).launch {
+                                // Simulate loading data
+                                openDialog.value = true
+                                littleLemonMainViewModel.setUserData(it)
+                                delay(2000)
+                                openDialog.value = false
 
-                            // Update data on the main thread
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT)
-                                    .show()
-                                navController.navigate(Routes.HOME.name) {
-                                    popUpTo(Routes.REGISTER.name) {
-                                        inclusive = true
+                                // Update data on the main thread
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT)
+                                        .show()
+                                    navController.navigate(Routes.HOME.name) {
+                                        popUpTo(Routes.REGISTER.name) {
+                                            inclusive = true
+                                        }
                                     }
                                 }
                             }
-                        }
-                    }, onNavigateToLogin = {
-                        navController.navigate(Routes.LOGIN.name) {
-                            popUpTo(Routes.REGISTER.name) {
-                                inclusive = true
-                            }
-                        }
-                    }
-                )
-            }
-            composable(Routes.LOGIN.name) {
-                LoginPage(
-                    viewModel = OnboardingViewModel(),
-                    onNavigateToHome = {
-                        CoroutineScope(Dispatchers.Default).launch {
-                            // Simulate loading data
-                            openDialog.value = true
-                            littleLemonMainViewModel.setUserData(it)
-                            delay(2000)
-                            openDialog.value = false
-
-                            // Update data on the main thread
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT)
-                                    .show()
-                                navController.navigate(Routes.HOME.name) {
-                                    popUpTo(Routes.LOGIN.name) {
-                                        inclusive = true
-                                    }
+                        }, onNavigateToLogin = {
+                            navController.navigate(Routes.LOGIN.name) {
+                                popUpTo(Routes.REGISTER.name) {
+                                    inclusive = true
                                 }
                             }
                         }
-                    },
-                    onNavigateToRegister = {
-                        navController.navigate(Routes.REGISTER.name) {
-                            popUpTo(Routes.LOGIN.name) {
-                                inclusive = true
-                            }
-                        }
-                    }
-                )
-            }
-            composable(Routes.HOME.name) {
-                HomePage(
-                    HomeViewModel(),
-                    uiState.littleLemonUser,
-                    onLogout = {
+                    )
+                }
+                composable(Routes.LOGIN.name) {
+                    LoginPage(
+                        viewModel = OnboardingViewModel(),
+                        onNavigateToHome = {
+                            CoroutineScope(Dispatchers.Default).launch {
+                                // Simulate loading data
+                                openDialog.value = true
+                                littleLemonMainViewModel.setUserData(it)
+                                delay(2000)
+                                openDialog.value = false
 
-
-                        CoroutineScope(Dispatchers.Default).launch {
-                            // Simulate loading data
-                            openDialog.value = true
-                            littleLemonMainViewModel.setUserData(LittleLemonUser("", "", "", ""))
-                            delay(500)
-                            openDialog.value = false
-
-                            // Update data on the main thread
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(context, "Logout Success", Toast.LENGTH_SHORT).show()
-                                navController.navigate(Routes.LOGIN.name) {
-                                    popUpTo(Routes.LOGIN.name) {
-                                        inclusive = true
+                                // Update data on the main thread
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT)
+                                        .show()
+                                    navController.navigate(Routes.HOME.name) {
+                                        popUpTo(Routes.LOGIN.name) {
+                                            inclusive = true
+                                        }
                                     }
                                 }
                             }
+                        },
+                        onNavigateToRegister = {
+                            navController.navigate(Routes.REGISTER.name) {
+                                popUpTo(Routes.LOGIN.name) {
+                                    inclusive = true
+                                }
+                            }
                         }
-                    },
-                    navController = navController,
-                    onSearchClicked = {
-                        dishItemList = it
-                        navController.navigate(Routes.SEARCH.name)
-                    },
-                    cartViewModel = CartViewModel(),
-                    onCheckoutFromCart = {dishList,total->
-                        checkoutViewModel.setItemAndPrice(
-                            newItemsList = dishList,
-                            newPrice = total
-                        )
-                        navController.navigate(Routes.ADDRESS_CONFIRM.name)
-                    }
-                )
-            }
-            composable(Routes.SPLASH.name) {
-                SplashPage()
-            }
-            composable(Routes.SEARCH.name) {
-                SearchItemPage(
-                    navController = navController,
-                    searchViewModel = SearchViewModel(
-                        allDishes = dishItemList
-                    ),
-                )
-            }
-            composable(
-                "${Routes.DISH_DETAIL.name}/{${RouteKeys.dishId}}",
-                arguments = listOf(
-                    navArgument(RouteKeys.dishId) {
-                        type = NavType.IntType
-                    }
-                )
-            ) {
-                it.arguments?.getInt(RouteKeys.dishId)?.let { it1 ->
-                    DishDetailPage(
-                        dishId = it1,
+                    )
+                }
+                composable(Routes.HOME.name) {
+                    HomePage(
+                        HomeViewModel(),
+                        uiState.littleLemonUser,
+                        onLogout = {
+                            CoroutineScope(Dispatchers.Default).launch {
+                                // Simulate loading data
+                                openDialog.value = true
+                                littleLemonMainViewModel.setUserData(LittleLemonUser("", "", "", ""))
+                                delay(500)
+                                openDialog.value = false
+
+                                // Update data on the main thread
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Logout Success", Toast.LENGTH_SHORT).show()
+                                    navController.navigate(Routes.LOGIN.name) {
+                                        popUpTo(Routes.LOGIN.name) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         navController = navController,
-                        checkoutViewModel = checkoutViewModel,
-                        onOrderNow = { dishList, total ->
+                        onSearchClicked = {
+                            dishItemList = it
+                            navController.navigate(Routes.SEARCH.name)
+                        },
+                        cartViewModel = CartViewModel(),
+                        onCheckoutFromCart = {dishList,total->
                             checkoutViewModel.setItemAndPrice(
                                 newItemsList = dishList,
                                 newPrice = total
                             )
+                            navController.navigate(Routes.ADDRESS_CONFIRM.name)
                         },
-                        onAddToCart = {cartItem->
-                            val isAlreadyInCart = cartItems.find {data-> data.localDishItem.id == cartItem.localDishItem.id }
-                            if(isAlreadyInCart==null){
-                                cartItems.add(cartItem)
-                                Toast.makeText(context,"Added to Cart",Toast.LENGTH_SHORT).show()
-                            }else{
-                                Toast.makeText(context,"Already in Cart",Toast.LENGTH_SHORT).show()
+                        isDarkTheme = uiState.isDarkMode,
+                        onThemeChange = {isNewThemeDark->
+                            CoroutineScope(Dispatchers.Default).launch {
+                                // Simulate loading data
+                                openDialog.value = true
+                                littleLemonMainViewModel.changeTheme(
+                                    MyAppTheme(isDarkMode = isNewThemeDark)
+                                )
+                                delay(3000)
+                                openDialog.value = false
+
+                                // Update data on the main thread
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Theme Change Success", Toast.LENGTH_SHORT).show()
+                                }
                             }
-                            navController.navigateUp()
                         }
                     )
                 }
-            }
-            composable(Routes.ADDRESS_CONFIRM.name) {
-                ChooseAddressInformation(
-                    viewModel = checkoutViewModel,
-                    navController = navController
-                )
-            }
-            composable(Routes.SELECT_PAYMENT.name) {
-                SelectPaymentPage(navController = navController, viewModel = checkoutViewModel)
-            }
-            composable(Routes.CHECKOUT_REVIEW.name) {
-                CheckOutReviewPage(navController = navController, viewModel = checkoutViewModel)
-            }
-            composable(Routes.EDIT_PROFILE.name) {
-                EditProfilePage(
-                    navController = navController,
-                    littleLemonUser = uiState.littleLemonUser,
-                    onEditUserInfo = { newUserInfo ->
-                        CoroutineScope(Dispatchers.Default).launch {
-                            // Simulate loading data
-                            openDialog.value = true
-                            littleLemonMainViewModel.setUserData(newUserInfo)
-                            delay(2000)
-                            openDialog.value = false
-
-                            // Update data on the main thread
-                            withContext(Dispatchers.Main) {
-                                Toast.makeText(context, "Edit Profile Success", Toast.LENGTH_SHORT)
-                                    .show()
+                composable(Routes.SPLASH.name) {
+                    SplashPage()
+                }
+                composable(Routes.SEARCH.name) {
+                    SearchItemPage(
+                        navController = navController,
+                        searchViewModel = SearchViewModel(
+                            allDishes = dishItemList
+                        ),
+                    )
+                }
+                composable(
+                    "${Routes.DISH_DETAIL.name}/{${RouteKeys.dishId}}",
+                    arguments = listOf(
+                        navArgument(RouteKeys.dishId) {
+                            type = NavType.IntType
+                        }
+                    )
+                ) {
+                    it.arguments?.getInt(RouteKeys.dishId)?.let { it1 ->
+                        DishDetailPage(
+                            dishId = it1,
+                            navController = navController,
+                            checkoutViewModel = checkoutViewModel,
+                            onOrderNow = { dishList, total ->
+                                checkoutViewModel.setItemAndPrice(
+                                    newItemsList = dishList,
+                                    newPrice = total
+                                )
+                            },
+                            onAddToCart = {cartItem->
+                                val isAlreadyInCart = cartItems.find {data-> data.localDishItem.id == cartItem.localDishItem.id }
+                                if(isAlreadyInCart==null){
+                                    cartItems.add(cartItem)
+                                    Toast.makeText(context,"Added to Cart",Toast.LENGTH_SHORT).show()
+                                }else{
+                                    Toast.makeText(context,"Already in Cart",Toast.LENGTH_SHORT).show()
+                                }
                                 navController.navigateUp()
                             }
-                        }
+                        )
                     }
-                )
-            }
-            composable(Routes.VIEW_ADDRESSES.name) {
-                ViewAddressPage(
-                    viewModel = checkoutViewModel,
-                    navController = navController
-                )
+                }
+                composable(Routes.ADDRESS_CONFIRM.name) {
+                    ChooseAddressInformation(
+                        viewModel = checkoutViewModel,
+                        navController = navController
+                    )
+                }
+                composable(Routes.SELECT_PAYMENT.name) {
+                    SelectPaymentPage(navController = navController, viewModel = checkoutViewModel)
+                }
+                composable(Routes.CHECKOUT_REVIEW.name) {
+                    CheckOutReviewPage(navController = navController, viewModel = checkoutViewModel)
+                }
+                composable(Routes.EDIT_PROFILE.name) {
+                    EditProfilePage(
+                        navController = navController,
+                        littleLemonUser = uiState.littleLemonUser,
+                        onEditUserInfo = { newUserInfo ->
+                            CoroutineScope(Dispatchers.Default).launch {
+                                // Simulate loading data
+                                openDialog.value = true
+                                littleLemonMainViewModel.setUserData(newUserInfo)
+                                delay(2000)
+                                openDialog.value = false
+
+                                // Update data on the main thread
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Edit Profile Success", Toast.LENGTH_SHORT)
+                                        .show()
+                                    navController.navigateUp()
+                                }
+                            }
+                        }
+                    )
+                }
+                composable(Routes.VIEW_ADDRESSES.name) {
+                    ViewAddressPage(
+                        viewModel = checkoutViewModel,
+                        navController = navController
+                    )
+                }
             }
         }
     }

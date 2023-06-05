@@ -12,14 +12,20 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
@@ -33,7 +39,9 @@ import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
 fun ProfileContent(
     littleLemonUser: LittleLemonUser,
     onLogout: () -> Unit,
-    navController: NavController
+    navController: NavController,
+    onThemeChange:(Boolean) -> Unit,
+    isDarkTheme:Boolean,
 ) {
     Scaffold(
         topBar = {
@@ -68,9 +76,19 @@ fun ProfileContent(
                 modifier = Modifier.padding(vertical = 10.dp)
             )
             SettingItem(
-                iconData = R.drawable.baseline_format_paint_24,
-                label = "App Theme",
-                onTap = {})
+                iconData = R.drawable.baseline_dark_mode_24,
+                label = "Night Mode",
+                onTap = {},
+                trailing = {
+                    Switch(
+                        checked = isDarkTheme,
+                        onCheckedChange = {darkMode->
+                            onThemeChange(darkMode)
+                        }
+                    )
+                },
+                verticalPaddingValue = 3.dp
+            )
             SettingItem(
                 iconData = R.drawable.baseline_g_translate_24,
                 label = "App Language",
@@ -119,7 +137,7 @@ fun UserInformation(littleLemonUser: LittleLemonUser) {
 }
 
 @Composable
-fun UserImageCircleView(userEmail:String="") {
+fun UserImageCircleView(userEmail: String = "") {
     Image(
         painter = painterResource(id = R.drawable.profile),
         contentDescription = userEmail,
@@ -128,11 +146,24 @@ fun UserImageCircleView(userEmail:String="") {
 }
 
 @Composable
-fun SettingItem(iconData: Int, label: String, onTap: () -> Unit) {
+fun SettingItem(
+    iconData: Int,
+    label: String,
+    onTap: () -> Unit,
+    verticalPaddingValue: Dp = 15.dp,
+    trailing: @Composable() () -> Unit = {
+        Image(
+            painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
+            contentDescription = label,
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+            modifier = Modifier.size(18.dp)
+        )
+    }
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = 20.dp, vertical = verticalPaddingValue)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { onTap() }
@@ -152,11 +183,6 @@ fun SettingItem(iconData: Int, label: String, onTap: () -> Unit) {
         Box(
             modifier = Modifier.weight(1F),
         )
-        Image(
-            painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
-            contentDescription = label,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
-            modifier = Modifier.size(18.dp)
-        )
+        trailing()
     }
 }
