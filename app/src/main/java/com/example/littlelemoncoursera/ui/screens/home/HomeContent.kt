@@ -163,7 +163,7 @@ fun SearchBoxOnHero(onSearch: () -> Unit) {
                 modifier = Modifier.padding(horizontal = 5.dp)
             )
             Text(
-                text = "Search Menu",
+                text = stringResource(R.string.search_menu),
                 style = MaterialTheme.typography.bodySmall,
             )
         }
@@ -180,7 +180,7 @@ fun OrderForDelivery(
         modifier = Modifier.padding(horizontal = 15.dp, vertical = 20.dp)
     ) {
         Text(
-            text = "Order For Delivery!".uppercase(),
+            text = stringResource(R.string.order_for_delivery).uppercase(),
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary

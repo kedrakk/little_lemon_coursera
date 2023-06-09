@@ -13,9 +13,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.helper.emailValidation
 import com.example.littlelemoncoursera.helper.emptyValidation
 import com.example.littlelemoncoursera.model.LittleLemonUser
@@ -46,7 +48,7 @@ fun LoginPage(
     val context = LocalContext.current
 
     AuthTemplate {
-        TextInputField(label = "Email Address", value = emailText, onValueChange = {
+        TextInputField(label = stringResource(R.string.email_address), value = emailText, onValueChange = {
             emailText = it
         }, isError = emailError.isNotEmpty())
         if (emailError.isNotEmpty())
@@ -60,7 +62,7 @@ fun LoginPage(
                 textAlign = TextAlign.Left
             )
         TextInputField(
-            label = "Password",
+            label = stringResource(R.string.password),
             value = passwordText,
             onValueChange = {
                 passwordText = it
@@ -104,13 +106,13 @@ fun LoginPage(
                     )
                 }
             },
-            label = "Login"
+            label = stringResource(R.string.login)
         )
         TextButton(
             onClick = {
                 onNavigateToRegister()
             },
-            label = "Don't have an account? Register",
+            label = stringResource(R.string.don_t_have_an_account_register),
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
         )
     }

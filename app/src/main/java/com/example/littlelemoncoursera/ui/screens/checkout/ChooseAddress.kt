@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -100,7 +101,8 @@ fun ChooseAddressInformation(
     Scaffold(
         topBar = {
             CommonAppBar(
-                title = if(isFromCheckoutFlow) "Confirm Your Address" else "View Addresses Information",
+                title = if(isFromCheckoutFlow) stringResource(R.string.confirm_your_address) else stringResource(
+                                    R.string.view_addresses_information),
                 onBackClicked = {
                     if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
@@ -135,7 +137,7 @@ fun ChooseAddressInformation(
                     onClick = {
                         navController.navigate(Routes.SELECT_PAYMENT.name)
                     },
-                    label = "Continue"
+                    label = stringResource(R.string.continue_label)
                 )
         }
     ) { padding ->
@@ -263,7 +265,8 @@ fun AddAddressForm(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = if (isUpdateAddress) "Update Your Address" else "Add Your Address",
+            text = if (isUpdateAddress) stringResource(R.string.update_your_address) else stringResource(
+                            R.string.add_your_address),
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier
                 .fillMaxWidth()
@@ -286,7 +289,7 @@ fun AddAddressForm(
                 onReceiverNameChanged(it)
             },
             isError = receiverNameError.isNotEmpty(),
-            label = "Enter Receiver Name",
+            label = stringResource(R.string.enter_receiver_name),
         )
         if (receiverNameError.isNotEmpty()) {
             Text(
@@ -305,7 +308,7 @@ fun AddAddressForm(
             value = phoneNumber,
             onValueChange = { onPhoneNumberChanged(it) },
             isError = phoneNumberError.isNotEmpty(),
-            label = "Enter Phone Number",
+            label = stringResource(R.string.enter_phone_number),
         )
         if (phoneNumberError.isNotEmpty()) {
             Text(
@@ -324,7 +327,7 @@ fun AddAddressForm(
             value = fullAddress,
             onValueChange = { onFullAddressChanged(it) },
             isError = fullAddressError.isNotEmpty(),
-            label = "Enter Address",
+            label = stringResource(R.string.enter_address),
             isSingleLine = false,
             maxLines = 3,
         )
@@ -366,9 +369,9 @@ fun AddAddressForm(
         }
         ActionButton(
             onClick = { onSaveAddress() },
-            label = "Save Address Information"
+            label = stringResource(R.string.save_address_information)
         )
-        TextButton(onClick = { onCancelSave() }, label = "Cancel")
+        TextButton(onClick = { onCancelSave() }, label = stringResource(R.string.cancel))
     }
 }
 

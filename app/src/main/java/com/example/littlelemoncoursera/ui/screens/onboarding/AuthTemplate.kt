@@ -12,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.ui.screens.components.LogoImage
 
 @Composable
@@ -34,12 +36,12 @@ fun AuthTemplate(content: @Composable (ColumnScope.() -> Unit)) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Let's get to know you",
+                text = stringResource(R.string.let_s_get_to_know_you),
                 style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
             )
         }
         Text(
-            text = "Personal Information",
+            text = stringResource(R.string.personal_information),
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 15.dp)
         )

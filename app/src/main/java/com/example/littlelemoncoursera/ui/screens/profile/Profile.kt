@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,7 @@ fun ProfileContent(
     Scaffold(
         topBar = {
             CommonAppBar(
-                title = "User Profile",
+                title = stringResource(R.string.user_profile),
                 onBackClicked = { /*TODO*/ },
                 isBackIconContains = false
             )
@@ -66,7 +67,7 @@ fun ProfileContent(
             UserInformation(littleLemonUser = littleLemonUser)
             SettingItem(
                 iconData = R.drawable.baseline_edit_24,
-                label = "Edit Profile",
+                label = stringResource(R.string.edit_profile),
                 onTap = {
                     navController.navigate(Routes.EDIT_PROFILE.name)
                 },
@@ -76,13 +77,13 @@ fun ProfileContent(
             )
             SettingItem(
                 iconData = R.drawable.baseline_list_24,
-                label = "View Orders List",
+                label = stringResource(R.string.view_orders_list),
                 onTap = {},
                 onTrailingTap = {}
             )
             SettingItem(
                 iconData = R.drawable.baseline_edit_location_24,
-                label = "View Address Information",
+                label = stringResource(R.string.view_address_information),
                 onTap = {
                     navController.navigate(Routes.VIEW_ADDRESSES.name)
                 },
@@ -95,7 +96,7 @@ fun ProfileContent(
             )
             SettingItem(
                 iconData = R.drawable.baseline_dark_mode_24,
-                label = "Night Mode",
+                label = stringResource(R.string.night_mode),
                 onTap = {},
                 trailing = {
                     Switch(
@@ -112,7 +113,7 @@ fun ProfileContent(
             )
             SettingItem(
                 iconData = R.drawable.baseline_g_translate_24,
-                label = "App Language",
+                label = stringResource(R.string.app_language),
                 onTap = {
                     isShowDropdown = !isShowDropdown
                 },
@@ -144,7 +145,7 @@ fun ProfileContent(
             )
             SettingItem(
                 iconData = R.drawable.baseline_rate_review_24,
-                label = "Rate App",
+                label = stringResource(R.string.rate_app),
                 onTap = {},
                 onTrailingTap = {}
             )
@@ -153,7 +154,7 @@ fun ProfileContent(
             )
             SettingItem(
                 iconData = R.drawable.baseline_login_24,
-                label = "Logout",
+                label = stringResource(R.string.logout),
                 onTap = {
                     onLogout()
                 },

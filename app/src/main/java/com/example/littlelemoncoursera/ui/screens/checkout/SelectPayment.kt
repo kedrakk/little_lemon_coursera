@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -33,7 +34,7 @@ fun SelectPaymentPage(navController: NavController, viewModel: CheckoutViewModel
     Scaffold(
         topBar = {
             CommonAppBar(
-                title = "Select Payment",
+                title = stringResource(R.string.select_payment),
                 onBackClicked = {
                     if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
@@ -45,7 +46,7 @@ fun SelectPaymentPage(navController: NavController, viewModel: CheckoutViewModel
             if(checkoutUIState.selectedPaymentMethod!=null)
                 ActionButton(
                     onClick = { navController.navigate(Routes.CHECKOUT_REVIEW.name) },
-                    label = "Continue"
+                    label = stringResource(R.string.continue_label)
                 )
         }
     ) {

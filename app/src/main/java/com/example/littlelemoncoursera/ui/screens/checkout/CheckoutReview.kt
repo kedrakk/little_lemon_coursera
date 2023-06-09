@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -41,7 +42,7 @@ fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewMode
     val context = LocalContext.current
     Scaffold(
         topBar = {
-            CommonAppBar(title = "Review Your Order", onBackClicked = {
+            CommonAppBar(title = stringResource(R.string.review_your_order), onBackClicked = {
                 if (navController.previousBackStackEntry != null) {
                     navController.navigateUp()
                 }
@@ -57,7 +58,7 @@ fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewMode
                         }
                     }
                 },
-                label = "Confirm Order"
+                label = stringResource(R.string.confirm_order)
             )
         }
     ) {
@@ -126,7 +127,7 @@ fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewMode
                 }
             )
             ReviewItemsCard(
-                title = "Review Your Selected Dished",
+                title = stringResource(R.string.review_your_selected_dished),
                 iconData = R.drawable.baseline_fastfood_24,
                 body = {
                     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -164,7 +165,7 @@ fun TotalPriceItem(total: Int) {
             .padding(vertical = 10.dp, horizontal = 10.dp),
         horizontalAlignment = Alignment.End
     ) {
-        Text(text = "Total", style = MaterialTheme.typography.bodySmall)
+        Text(text = stringResource(R.string.total), style = MaterialTheme.typography.bodySmall)
         Text(
             text = "$ $total",
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)

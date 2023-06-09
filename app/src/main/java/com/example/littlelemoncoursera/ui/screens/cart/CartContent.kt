@@ -23,9 +23,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.CartItem
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
@@ -43,7 +45,7 @@ fun CartContent(cartViewModel: CartViewModel,onCheckoutFromCart:(List<LocalDishI
     return Scaffold(
         topBar = {
             CommonAppBar(
-                title = "Cart Items",
+                title = stringResource(R.string.cart_items),
                 onBackClicked = { /*TODO*/ },
                 isBackIconContains = false
             )
@@ -56,7 +58,7 @@ fun CartContent(cartViewModel: CartViewModel,onCheckoutFromCart:(List<LocalDishI
                         val total = cartViewModel.getTotal(cartUiState.selectedCartItems)
                         onCheckoutFromCart(selectedDishItems,total)
                     },
-                    label = "Checkout Now",
+                    label = stringResource(R.string.checkout_now),
                     verticalPadding = 10
                 )
             }

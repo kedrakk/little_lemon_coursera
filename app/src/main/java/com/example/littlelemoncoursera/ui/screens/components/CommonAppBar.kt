@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.littlelemoncoursera.R
@@ -36,7 +37,7 @@ fun CommonAppBar(
                 IconButton(onClick = { onBackClicked() }) {
                     Image(
                         painter = painterResource(id = R.drawable.baseline_arrow_back_24),
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
                     )
                 }
@@ -58,7 +59,7 @@ fun HomeAppBar(onNavigateToSearchPage: () -> Unit) {
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.baseline_search_24),
-                    contentDescription = "Search Items",
+                    contentDescription = stringResource(R.string.search_items),
                     colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
                 )
             }

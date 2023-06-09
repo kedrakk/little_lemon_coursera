@@ -21,7 +21,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.data.local.TimeSlotsList
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.ActionButton
@@ -40,7 +42,7 @@ fun ReservationContent(viewModel: ReservationViewModel,onReserve:()->Unit) {
     Scaffold(
         topBar = {
             CommonAppBar(
-                title = "Reserve a table",
+                title = stringResource(R.string.reserve_a_table),
                 onBackClicked = { /*TODO*/ },
                 isBackIconContains = false
             )
@@ -101,7 +103,7 @@ fun SelectGuestSizeComp(
 ) {
     Column {
         Text(
-            text = "Select the guest size",
+            text = stringResource(R.string.select_the_guest_size),
             modifier = Modifier.padding(bottom = 10.dp)
         )
         QtySelectorComponent(

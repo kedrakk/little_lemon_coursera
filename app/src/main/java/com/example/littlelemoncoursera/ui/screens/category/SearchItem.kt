@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
@@ -76,7 +77,7 @@ fun SearchPageAppBar(
         IconButton(onClick = { onBackClicked() }) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_arrow_back_24),
-                contentDescription = "Back",
+                contentDescription = stringResource(R.string.back),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
             )
         }
@@ -87,7 +88,7 @@ fun SearchPageAppBar(
             },
             isError = false,
             isOutline = false,
-            placeholderText = "Enter Search Phrase",
+            placeholderText = stringResource(R.string.enter_search_phrase),
         )
     }
 }

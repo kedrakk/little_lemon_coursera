@@ -16,9 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.helper.emailValidation
 import com.example.littlelemoncoursera.helper.emptyValidation
 import com.example.littlelemoncoursera.model.LittleLemonUser
@@ -65,7 +67,7 @@ fun RegisterPage(
             when (uiState.currentStep) {
                 1 -> Column {
                     TextInputField(
-                        label = "First name",
+                        label = stringResource(R.string.first_name),
                         value = firstNameText,
                         onValueChange = {
                             firstNameText = it
@@ -81,7 +83,7 @@ fun RegisterPage(
                                 fontSize = 10.sp
                             )
                         )
-                    TextInputField(label = "Last name", value = lastNameText, onValueChange = {
+                    TextInputField(label = stringResource(R.string.last_name), value = lastNameText, onValueChange = {
                         lastNameText = it
                     }, isError = lastNameError.isNotEmpty())
                     if (lastNameError.isNotEmpty())
@@ -103,7 +105,7 @@ fun RegisterPage(
                                 viewModel.changeIndex(2)
                             }
                         },
-                        label = "Continue"
+                        label = stringResource(R.string.continue_label)
                     )
                 }
 
@@ -112,7 +114,7 @@ fun RegisterPage(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TextInputField(label = "Email Address", value = emailText, onValueChange = {
+                    TextInputField(label = stringResource(R.string.email_address), value = emailText, onValueChange = {
                         emailText = it
                     }, isError = emailError.isNotEmpty())
                     if (emailError.isNotEmpty())
@@ -136,14 +138,14 @@ fun RegisterPage(
                                 viewModel.changeIndex(3)
                             }
                         },
-                        label = "Continue"
+                        label = stringResource(R.string.continue_label)
                     )
-                    TextButton(onClick = { viewModel.changeIndex(1) }, label = "Back To Previous")
+                    TextButton(onClick = { viewModel.changeIndex(1) }, label = stringResource(R.string.back_to_previous))
                 }
 
                 else -> Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     TextInputField(
-                        label = "Password",
+                        label = stringResource(R.string.password),
                         value = passwordText,
                         onValueChange = {
                             passwordText = it
@@ -182,9 +184,9 @@ fun RegisterPage(
                                 )
                             }
                         },
-                        label = "Create Account"
+                        label = stringResource(R.string.create_account)
                     )
-                    TextButton(onClick = { viewModel.changeIndex(2) }, label = "Back To Previous")
+                    TextButton(onClick = { viewModel.changeIndex(2) }, label = stringResource(R.string.back_to_previous))
                 }
             }
 
@@ -192,7 +194,7 @@ fun RegisterPage(
                 onClick = {
                     onNavigateToLogin()
                 },
-                label = "Already have an account? Login",
+                label = stringResource(R.string.already_have_an_account_login),
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
             )
         }

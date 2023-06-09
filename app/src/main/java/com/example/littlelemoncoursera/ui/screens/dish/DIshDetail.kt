@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -52,7 +53,7 @@ fun DishDetailPage(
 ) {
     val uiState by checkoutViewModel.uiState.collectAsState()
     val dish = localDishDatabase.localDishDao().getLocalDishById(dishId).observeAsState().value
-        ?: return EmptyPageComponent(message = "Empty Dish")
+        ?: return EmptyPageComponent(message = stringResource(R.string.empty_dish))
 
     return Scaffold(
         topBar = {
@@ -79,7 +80,7 @@ fun DishDetailPage(
                         onOrderNow(dishList, totalPrice)
                         navController.navigate(Routes.ADDRESS_CONFIRM.name)
                     },
-                    label = "Order Now",
+                    label = stringResource(R.string.order_now),
                     verticalPadding = 10
                 )
                 ActionButton(
@@ -92,7 +93,7 @@ fun DishDetailPage(
                         )
                         checkoutViewModel.setDefaultQty()
                     },
-                    label = "Add To Cart",
+                    label = stringResource(R.string.add_to_cart),
                     isOutline = true,
                     verticalPadding = 10
                 )
@@ -140,7 +141,7 @@ fun DishDetailPage(
                             .padding(horizontal = 15.dp)
                     ) {
                         Text(
-                            text = "Total Price",
+                            text = stringResource(R.string.total_price),
                             style = MaterialTheme.typography.bodySmall
                         )
                         Text(

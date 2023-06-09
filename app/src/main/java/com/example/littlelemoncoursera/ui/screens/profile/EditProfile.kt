@@ -18,12 +18,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.helper.emailValidation
 import com.example.littlelemoncoursera.helper.emptyValidation
 import com.example.littlelemoncoursera.model.LittleLemonUser
@@ -49,7 +51,7 @@ fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUs
     Scaffold(
         topBar = {
             CommonAppBar(
-                title = "Edit Profile",
+                title = stringResource(R.string.edit_profile),
                 onBackClicked = {
                     if (navController.previousBackStackEntry != null) {
                         navController.navigateUp()
@@ -67,7 +69,7 @@ fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUs
                 UserImageCircleView(userEmail = littleLemonUser.email)
             }
             TextInputField(
-                label = "First Name",
+                label = stringResource(R.string.first_name),
                 value = firstNameTextBox,
                 onValueChange = { newValue ->
                     firstNameTextBox = newValue
@@ -85,7 +87,7 @@ fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUs
                     textAlign = TextAlign.Left
                 )
             TextInputField(
-                label = "Last Name",
+                label = stringResource(R.string.last_name),
                 value = lastNameTextBox,
                 onValueChange = { newValue ->
                     lastNameTextBox = newValue
@@ -103,7 +105,7 @@ fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUs
                     textAlign = TextAlign.Left
                 )
             TextInputField(
-                label = "Email",
+                label = stringResource(R.string.email_address),
                 value = littleLemonUser.email,
                 onValueChange = { },
                 isError = false,
@@ -121,7 +123,7 @@ fun EditProfilePage(navController: NavController, littleLemonUser: LittleLemonUs
                         )
                     }
                 },
-                label = "Edit Now"
+                label = stringResource(R.string.edit_now)
             )
         }
     }
