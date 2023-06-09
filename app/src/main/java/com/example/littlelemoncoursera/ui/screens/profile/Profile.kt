@@ -1,6 +1,7 @@
 package com.example.littlelemoncoursera.ui.screens.profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,6 +32,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.littlelemoncoursera.R
+import com.example.littlelemoncoursera.data.local.AppLanguageList
+import com.example.littlelemoncoursera.model.AppLanguage
 import com.example.littlelemoncoursera.model.LittleLemonUser
 import com.example.littlelemoncoursera.navigation.Routes
 import com.example.littlelemoncoursera.ui.screens.components.CommonAppBar
@@ -40,9 +45,12 @@ fun ProfileContent(
     littleLemonUser: LittleLemonUser,
     onLogout: () -> Unit,
     navController: NavController,
-    onThemeChange:(Boolean) -> Unit,
-    isDarkTheme:Boolean,
+    onThemeChange: (Boolean) -> Unit,
+    isDarkTheme: Boolean,
 ) {
+    var isShowDropdown by remember {
+        mutableStateOf(false)
+    }
     Scaffold(
         topBar = {
             CommonAppBar(
@@ -52,23 +60,33 @@ fun ProfileContent(
             )
         }
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column(
+            modifier = Modifier.padding(it),
+        ) {
             UserInformation(littleLemonUser = littleLemonUser)
             SettingItem(
                 iconData = R.drawable.baseline_edit_24,
                 label = "Edit Profile",
                 onTap = {
                     navController.navigate(Routes.EDIT_PROFILE.name)
+                },
+                onTrailingTap = {
+                    navController.navigate(Routes.EDIT_PROFILE.name)
                 }
             )
             SettingItem(
                 iconData = R.drawable.baseline_list_24,
                 label = "View Orders List",
-                onTap = {})
+                onTap = {},
+                onTrailingTap = {}
+            )
             SettingItem(
                 iconData = R.drawable.baseline_edit_location_24,
                 label = "View Address Information",
                 onTap = {
+                    navController.navigate(Routes.VIEW_ADDRESSES.name)
+                },
+                onTrailingTap = {
                     navController.navigate(Routes.VIEW_ADDRESSES.name)
                 }
             )
@@ -82,21 +100,54 @@ fun ProfileContent(
                 trailing = {
                     Switch(
                         checked = isDarkTheme,
-                        onCheckedChange = {darkMode->
+                        onCheckedChange = { darkMode ->
                             onThemeChange(darkMode)
                         }
                     )
                 },
-                verticalPaddingValue = 3.dp
+                verticalPaddingValue = 3.dp,
+                onTrailingTap = {
+
+                }
             )
             SettingItem(
                 iconData = R.drawable.baseline_g_translate_24,
                 label = "App Language",
-                onTap = {})
+                onTap = {
+                    isShowDropdown = !isShowDropdown
+                },
+                onTrailingTap = {
+                    isShowDropdown = !isShowDropdown
+                },
+                trailing = {
+                    Column() {
+                        Image(
+                            painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
+                            contentDescription = "App Language",
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+                            modifier = Modifier
+                                .size(18.dp)
+                                .clickable { isShowDropdown = !isShowDropdown }
+                        )
+                        LanguagePopup(
+                            expanded = isShowDropdown,
+                            closeDropDown = {
+                                isShowDropdown = false
+                            },
+                            items = AppLanguageList.allLanguages,
+                            onClickDropDown = {
+                                isShowDropdown = false
+                            }
+                        )
+                    }
+                }
+            )
             SettingItem(
                 iconData = R.drawable.baseline_rate_review_24,
                 label = "Rate App",
-                onTap = {})
+                onTap = {},
+                onTrailingTap = {}
+            )
             Divider(
                 modifier = Modifier.padding(vertical = 10.dp)
             )
@@ -105,7 +156,33 @@ fun ProfileContent(
                 label = "Logout",
                 onTap = {
                     onLogout()
+                },
+                onTrailingTap = {
+                    onLogout()
                 }
+            )
+        }
+    }
+}
+
+@Composable
+fun LanguagePopup(
+    expanded: Boolean,
+    closeDropDown: () -> Unit,
+    items: List<AppLanguage>,
+    onClickDropDown: (AppLanguage) -> Unit
+) {
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = {
+            closeDropDown()
+        },
+    ) {
+        // adding items
+        items.forEachIndexed { _, itemValue ->
+            DropdownMenuItem(
+                text = { Text(text = itemValue.langName) },
+                onClick = { onClickDropDown(itemValue) }
             )
         }
     }
@@ -150,13 +227,16 @@ fun SettingItem(
     iconData: Int,
     label: String,
     onTap: () -> Unit,
+    onTrailingTap: () -> Unit,
     verticalPaddingValue: Dp = 15.dp,
     trailing: @Composable() () -> Unit = {
         Image(
             painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
             contentDescription = label,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
-            modifier = Modifier.size(18.dp)
+            modifier = Modifier
+                .size(18.dp)
+                .clickable { onTrailingTap() }
         )
     }
 ) {
