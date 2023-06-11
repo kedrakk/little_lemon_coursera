@@ -9,10 +9,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class CartViewModel:ViewModel() {
+class CartViewModel(empText: String):ViewModel() {
 
-    private val _uiState = MutableStateFlow(CartUIState())
+    private val _uiState = MutableStateFlow(CartUIState(emptyText = empText))
     val uiState: StateFlow<CartUIState> = _uiState.asStateFlow()
+
+    private val empLabel:String = empText
 
     fun changeQTY(item: CartItem,isIncrease:Boolean,itemCount:Int ){
         var tempCount = itemCount
@@ -23,15 +25,15 @@ class CartViewModel:ViewModel() {
             tempCount -= 1
             cartItems.find { it.localDishItem.id == item.localDishItem.id }!!.quantity -= 1
         }
-        val emptyText = if(cartItems.isEmpty()) "Cart is Empty" else ""
+        val emptyText = if(cartItems.isEmpty()) empLabel else ""
         _uiState.update {
             it.copy(selectedCartItems = cartItems, emptyText = emptyText, itemCount = tempCount)
         }
     }
 
-    fun removeItemFromCart(item: CartItem,){
+    fun removeItemFromCart(item: CartItem){
         cartItems.remove(item);
-        val emptyText = if(cartItems.isEmpty()) "Cart is Empty" else ""
+        val emptyText = if(cartItems.isEmpty()) empLabel else ""
         _uiState.update {
             it.copy(selectedCartItems = cartItems,  emptyText = emptyText)
         }

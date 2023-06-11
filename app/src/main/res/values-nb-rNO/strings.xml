@@ -10,6 +10,7 @@
     <string name="confirm_order">Bekreft over bestillingen din</string>
     <string name="review_your_selected_dished">Se gjennom dine valgte varer</string>
     <string name="total">Total</string>
+    <string name="select_your_address">Velg din adresse</string>
     <string name="confirm_your_address">Bekreft over din adresse</string>
     <string name="view_addresses_information">Se adresseinformasjon</string>
     <string name="continue_label">Fortsette</string>
@@ -23,6 +24,7 @@
     <string name="select_payment">Velg Betaling</string>
     <string name="search_items">Søk etter elementer</string>
     <string name="empty_dish">Tom tallerken</string>
+    <string name="cart_is_empty">Handlevognen er tom</string>
     <string name="order_now">Bestill nå</string>
     <string name="add_to_cart">Legg i handlekurv</string>
     <string name="total_price">Totalpris</string>

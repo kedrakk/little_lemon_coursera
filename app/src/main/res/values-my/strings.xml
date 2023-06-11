@@ -10,6 +10,7 @@
     <string name="confirm_order">အော်ဒါကို အတည်ပြုရန်</string>
     <string name="review_your_selected_dished">ရွေးချယ်ထားသည်များကို ပြန်စစ်ရန်</string>
     <string name="total">စုစုပေါင်း</string>
+    <string name="select_your_address">သင့်လိပ်စာကိုရွေးချယ်ရန်</string>
     <string name="confirm_your_address">သင့်လိပ်စာကို အတည်ပြုရန်</string>
     <string name="view_addresses_information">သင့်လိပ်စာကို ပြန်ကြည့်ရန်</string>
     <string name="continue_label">ရှေ့ဆက်ရန်</string>
@@ -23,6 +24,7 @@
     <string name="select_payment">ငွေပေးချေမှုကိုရွေးချယ်ရန်</string>
     <string name="search_items">ပစ္စည်းများရှာဖွေရန်</string>
     <string name="empty_dish">ပစွည်းမရှိပါ</string>
+    <string name="cart_is_empty">လှည်းတွင်ပစ္စည်းမရှိပါ</string>
     <string name="order_now">ယခုမှာယူရန်</string>
     <string name="add_to_cart">လှည်းသို့ထည့်ရန်</string>
     <string name="total_price">စုစုပေါင်းပမာဏ</string>

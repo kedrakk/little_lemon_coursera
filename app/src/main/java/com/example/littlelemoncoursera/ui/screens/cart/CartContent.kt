@@ -64,7 +64,7 @@ fun CartContent(cartViewModel: CartViewModel,onCheckoutFromCart:(List<LocalDishI
             }
         }
     ) {
-        if (cartUiState.emptyText.isNotEmpty()) {
+        if (cartUiState.selectedCartItems.isEmpty()) {
             Box(
                 modifier = Modifier.padding(it).fillMaxSize(),
                 contentAlignment = Alignment.Center

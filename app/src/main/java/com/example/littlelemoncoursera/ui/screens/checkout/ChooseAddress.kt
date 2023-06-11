@@ -393,15 +393,17 @@ fun ShowAddressList(
 ) {
     LazyColumn() {
         if(isFromCheckoutFlow)
-        item {
-            Text(
-                text = "Select Your Address",
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp, top = 10.dp),
-                textAlign = TextAlign.Center
-            )
+        {
+            item {
+                Text(
+                    text = stringResource(id = R.string.select_your_address),
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp, top = 10.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
         }
         items(addressList.size) {
             Row(

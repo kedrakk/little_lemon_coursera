@@ -54,6 +54,8 @@ fun ProfileContent(
     var isShowDropdown by remember {
         mutableStateOf(false)
     }
+    val selectedLang: AppLanguage? =
+        AppLanguageList.allLanguages.firstOrNull { it.langCode == currentLangCode }
     Scaffold(
         topBar = {
             CommonAppBar(
@@ -124,18 +126,26 @@ fun ProfileContent(
                 },
                 trailing = {
                     Column() {
+                        Image(
+                            painter = painterResource(id = selectedLang?.res ?: R.drawable.us),
+                            contentDescription = "App Language",
+                            //colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+                            modifier = Modifier
+                                .size(25.dp)
+                                .clickable { isShowDropdown = !isShowDropdown }
+                        )
 
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = currentLangCode)
-                            Image(
-                                painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
-                                contentDescription = "App Language",
-                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
-                                modifier = Modifier
-                                    .size(18.dp)
-                                    .clickable { isShowDropdown = !isShowDropdown }
-                            )
-                        }
+//                        Row(verticalAlignment = Alignment.CenterVertically) {
+//                            Text(text = currentLangCode)
+//                            Image(
+//                                painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
+//                                contentDescription = "App Language",
+//                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+//                                modifier = Modifier
+//                                    .size(18.dp)
+//                                    .clickable { isShowDropdown = !isShowDropdown }
+//                            )
+//                        }
                         LanguagePopup(
                             expanded = isShowDropdown,
                             closeDropDown = {

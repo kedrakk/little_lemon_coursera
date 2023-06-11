@@ -9,6 +9,7 @@
     <string name="confirm_order">Confirm Order</string>
     <string name="review_your_selected_dished">Review Your Selected Dished</string>
     <string name="total">Total</string>
+    <string name="select_your_address">Select Your Address</string>
     <string name="confirm_your_address">Confirm Your Address</string>
     <string name="view_addresses_information">View Addresses Information</string>
     <string name="continue_label">Continue</string>
@@ -22,6 +23,7 @@
     <string name="select_payment">Select Payment</string>
     <string name="search_items">Search Items</string>
     <string name="empty_dish">Empty Dish</string>
+    <string name="cart_is_empty">Cart is empty</string>
     <string name="order_now">Order Now</string>
     <string name="add_to_cart">Add To Cart</string>
     <string name="total_price">Total Price</string>

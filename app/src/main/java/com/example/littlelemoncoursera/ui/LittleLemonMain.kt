@@ -12,12 +12,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.littlelemoncoursera.R
 import com.example.littlelemoncoursera.cartItems
 import com.example.littlelemoncoursera.data.local.entity.LocalDishItem
 import com.example.littlelemoncoursera.model.CartItem
@@ -184,7 +186,7 @@ fun LittleLemonMainPage(
                             dishItemList = it
                             navController.navigate(Routes.SEARCH.name)
                         },
-                        cartViewModel = CartViewModel(),
+                        cartViewModel = CartViewModel(empText = stringResource(id = R.string.cart_is_empty)),
                         onCheckoutFromCart = {dishList,total->
                             checkoutViewModel.setItemAndPrice(
                                 newItemsList = dishList,
