@@ -197,7 +197,6 @@ fun LanguagePopup(
                 onClick = {
                     onClickDropDown(itemValue)
                 },
-                //enabled = selectedLang == itemValue.langName
             )
         }
     }
