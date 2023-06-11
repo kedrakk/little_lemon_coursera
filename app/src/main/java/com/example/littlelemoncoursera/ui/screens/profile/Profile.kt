@@ -48,6 +48,8 @@ fun ProfileContent(
     navController: NavController,
     onThemeChange: (Boolean) -> Unit,
     isDarkTheme: Boolean,
+    onLanguageChanged: (String) -> Unit,
+    currentLangCode: String
 ) {
     var isShowDropdown by remember {
         mutableStateOf(false)
@@ -122,23 +124,31 @@ fun ProfileContent(
                 },
                 trailing = {
                     Column() {
-                        Image(
-                            painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
-                            contentDescription = "App Language",
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
-                            modifier = Modifier
-                                .size(18.dp)
-                                .clickable { isShowDropdown = !isShowDropdown }
-                        )
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = currentLangCode)
+                            Image(
+                                painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
+                                contentDescription = "App Language",
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .clickable { isShowDropdown = !isShowDropdown }
+                            )
+                        }
                         LanguagePopup(
                             expanded = isShowDropdown,
                             closeDropDown = {
                                 isShowDropdown = false
                             },
                             items = AppLanguageList.allLanguages,
-                            onClickDropDown = {
+                            onClickDropDown = { lang ->
                                 isShowDropdown = false
-                            }
+                                if (lang.langCode != currentLangCode) {
+                                    onLanguageChanged(lang.langCode)
+                                }
+                            },
+                            selectedLang = currentLangCode
                         )
                     }
                 }
@@ -171,7 +181,8 @@ fun LanguagePopup(
     expanded: Boolean,
     closeDropDown: () -> Unit,
     items: List<AppLanguage>,
-    onClickDropDown: (AppLanguage) -> Unit
+    onClickDropDown: (AppLanguage) -> Unit,
+    selectedLang: String
 ) {
     DropdownMenu(
         expanded = expanded,
@@ -182,8 +193,11 @@ fun LanguagePopup(
         // adding items
         items.forEachIndexed { _, itemValue ->
             DropdownMenuItem(
-                text = { Text(text = itemValue.langName) },
-                onClick = { onClickDropDown(itemValue) }
+                text = { Text(text = itemValue.name) },
+                onClick = {
+                    onClickDropDown(itemValue)
+                },
+                //enabled = selectedLang == itemValue.langName
             )
         }
     }

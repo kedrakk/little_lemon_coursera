@@ -53,6 +53,8 @@ fun HomePage(
     onCheckoutFromCart:(List<LocalDishItem>, Int)->Unit,
     onThemeChange:(Boolean) -> Unit,
     isDarkTheme:Boolean,
+    onLanguageChanged: (String) -> Unit,
+    currentLangCode: String
 ) {
     var categoryName by remember {
         mutableStateOf("")
@@ -121,7 +123,9 @@ fun HomePage(
                     onLogout = { onLogout() },
                     navController = navController,
                     isDarkTheme = isDarkTheme,
-                    onThemeChange = onThemeChange
+                    onThemeChange = onThemeChange,
+                    onLanguageChanged = onLanguageChanged,
+                    currentLangCode = currentLangCode
                 )
                 else -> HomeContent(
                     navController = navController,

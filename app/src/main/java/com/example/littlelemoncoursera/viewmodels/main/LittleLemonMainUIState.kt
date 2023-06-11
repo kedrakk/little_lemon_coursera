@@ -10,5 +10,6 @@ data class LittleLemonMainUIState(
         ""
     ),
     val isLoading: Boolean = true,
-    val isDarkMode:Boolean = true
+    val isDarkMode:Boolean = true,
+    val langCode:String = "en"
 )

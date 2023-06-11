@@ -22,6 +22,7 @@ class UserPreferenceRepository(private val dataStore: DataStore<Preferences>) {
         val EMAIL = stringPreferencesKey("email")
         val PASSWORD = stringPreferencesKey("password")
         val ISDARKMODE = booleanPreferencesKey("is_dark_mode")
+        val LANGCODE = stringPreferencesKey("lang_code")
         const val TAG = "UserPreferencesRepo"
     }
 
@@ -40,6 +41,12 @@ class UserPreferenceRepository(private val dataStore: DataStore<Preferences>) {
         }
     }
 
+    suspend fun saveLanguageCode(langCode:String){
+        dataStore.edit {prefs->
+            prefs[LANGCODE] = langCode
+        }
+    }
+
     val littleLemonUserWithAppTheme:Flow<LittleLemonUserWithAppTheme> = dataStore.data.catch {
         if(it is IOException) {
             Log.e(TAG, "Error reading preferences.", it)
@@ -55,7 +62,8 @@ class UserPreferenceRepository(private val dataStore: DataStore<Preferences>) {
                 email = it[EMAIL] ?: "",
                 password = it[PASSWORD] ?: ""
             ),
-            myAppTheme = MyAppTheme(isDarkMode = it[ISDARKMODE]?:false)
+            myAppTheme = MyAppTheme(isDarkMode = it[ISDARKMODE]?:false),
+            langCode = it[LANGCODE]?:"en"
         )
     }
 

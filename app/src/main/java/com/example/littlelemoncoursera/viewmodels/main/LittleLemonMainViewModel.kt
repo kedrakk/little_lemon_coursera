@@ -1,5 +1,7 @@
 package com.example.littlelemoncoursera.viewmodels.main
 
+import android.content.Context
+import android.content.res.Configuration
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class LittleLemonMainViewModel(private val userPreferenceRepository: UserPreferenceRepository) :
     ViewModel() {
@@ -33,7 +36,12 @@ class LittleLemonMainViewModel(private val userPreferenceRepository: UserPrefere
     val uiState: StateFlow<LittleLemonMainUIState> =
         userPreferenceRepository.littleLemonUserWithAppTheme.map { userWithTheme ->
             delay(3000L)
-            LittleLemonMainUIState(userWithTheme.littleLemonUser, isLoading = false,isDarkMode = userWithTheme.myAppTheme.isDarkMode)
+            LittleLemonMainUIState(
+                userWithTheme.littleLemonUser,
+                isLoading = false,
+                isDarkMode = userWithTheme.myAppTheme.isDarkMode,
+                langCode = userWithTheme.langCode
+            )
         }
             .stateIn(
                 scope = viewModelScope,
@@ -51,5 +59,24 @@ class LittleLemonMainViewModel(private val userPreferenceRepository: UserPrefere
         viewModelScope.launch {
             userPreferenceRepository.saveThemeData(newThemeData)
         }
+    }
+
+    fun updateLocale(context: Context, language: String) {
+        context.resources.apply {
+            val locale = Locale(language)
+            val config = Configuration(configuration)
+
+            context.createConfigurationContext(configuration)
+            Locale.setDefault(locale)
+            config.setLocale(locale)
+            context.resources.updateConfiguration(config, displayMetrics)
+        }
+    }
+
+    fun changeLanguage(context: Context, langCode:String){
+        viewModelScope.launch {
+            userPreferenceRepository.saveLanguageCode(langCode)
+        }
+        updateLocale(context = context, language = langCode)
     }
 }

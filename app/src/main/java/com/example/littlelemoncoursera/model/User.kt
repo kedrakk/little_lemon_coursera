@@ -13,5 +13,6 @@ data class MyAppTheme(
 
 data class LittleLemonUserWithAppTheme(
     val littleLemonUser: LittleLemonUser,
-    val myAppTheme: MyAppTheme
+    val myAppTheme: MyAppTheme,
+    val langCode:String
 )

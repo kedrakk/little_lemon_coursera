@@ -78,6 +78,10 @@ fun LittleLemonMainPage(
         }
     }
 
+    if(uiState.langCode.isNotEmpty()){
+        littleLemonMainViewModel.updateLocale(context = context, language = uiState.langCode)
+    }
+
     LittleLemonCourseraTheme(
         darkTheme = uiState.isDarkMode
     ) {
@@ -204,7 +208,22 @@ fun LittleLemonMainPage(
                                     Toast.makeText(context, "Theme Change Success", Toast.LENGTH_SHORT).show()
                                 }
                             }
-                        }
+                        },
+                        onLanguageChanged = {newLang->
+                            CoroutineScope(Dispatchers.Default).launch {
+                                // Simulate loading data
+                                openDialog.value = true
+                                littleLemonMainViewModel.changeLanguage(context,newLang)
+                                delay(3000)
+                                openDialog.value = false
+
+                                // Update data on the main thread
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(context, "Language Change Success", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        },
+                        currentLangCode = uiState.langCode
                     )
                 }
                 composable(Routes.SPLASH.name) {
