@@ -129,23 +129,10 @@ fun ProfileContent(
                         Image(
                             painter = painterResource(id = selectedLang?.res ?: R.drawable.us),
                             contentDescription = "App Language",
-                            //colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
                             modifier = Modifier
                                 .size(25.dp)
                                 .clickable { isShowDropdown = !isShowDropdown }
                         )
-
-//                        Row(verticalAlignment = Alignment.CenterVertically) {
-//                            Text(text = currentLangCode)
-//                            Image(
-//                                painter = painterResource(id = R.drawable.baseline_keyboard_arrow_right_24),
-//                                contentDescription = "App Language",
-//                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary),
-//                                modifier = Modifier
-//                                    .size(18.dp)
-//                                    .clickable { isShowDropdown = !isShowDropdown }
-//                            )
-//                        }
                         LanguagePopup(
                             expanded = isShowDropdown,
                             closeDropDown = {
@@ -203,7 +190,12 @@ fun LanguagePopup(
         // adding items
         items.forEachIndexed { _, itemValue ->
             DropdownMenuItem(
-                text = { Text(text = itemValue.name) },
+                text = {
+                    Text(
+                        text = itemValue.name,
+                        fontWeight = if(selectedLang==itemValue.langCode) FontWeight.Bold else FontWeight.Light
+                    )
+                },
                 onClick = {
                     onClickDropDown(itemValue)
                 },
