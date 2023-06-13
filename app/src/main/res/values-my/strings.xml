@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LittleLemonCoursera</string>
+    <string name="app_name">Little Lemon</string>
     <string name="hero_desc">ကျွန်ုပ်တို့သည် မိသားစုပိုင် မြေထဲပင်လယ်စားသောက်ဆိုင်ဖြစ်ပြီး ခေတ်မီဆန်းသစ်သော လှည့်ကွက်များဖြင့် ကျွေးမွေးသော ရိုးရာချက်ပြုတ်နည်းများကို အာရုံစိုက်ပါသည်။</string>
     <string name="cart_items">လှည်းပစ္စည်းများ</string>
     <string name="checkout_now">ယခုပေးချေရန်။</string>

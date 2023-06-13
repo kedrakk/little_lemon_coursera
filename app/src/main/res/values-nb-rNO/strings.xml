@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LittleLemonCoursera</string>
+    <string name="app_name">Little Lemon</string>
     <string name="hero_desc">Vi er en familieeid middelhavsrestaurant, fokusert på tradisjonelle oppskrifter servert med en moderne vri.</string>
     <string name="cart_items">Handlevogn varer</string>
     <string name="checkout_now">Sjekk ut nå</string>

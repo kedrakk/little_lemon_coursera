@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LittleLemonCoursera</string>
+    <string name="app_name">Little Lemon</string>
     <string name="hero_desc">We are a family owned Mediterrianean restaurant, focused on traditional recipes served with a modern twist.</string>
     <string name="cart_items">Cart Items</string>
     <string name="checkout_now">Checkout Now</string>
