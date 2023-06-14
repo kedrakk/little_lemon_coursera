@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.littlelemoncoursera"
+        applicationId "com.kedkapp.littlelemoncoursera"
         minSdk 26
         targetSdk 33
         versionCode 1
@@ -24,8 +24,12 @@ android {
 
     buildTypes {
         release {
+            debuggable = false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            debuggable = false
         }
     }
     compileOptions {
