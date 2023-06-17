@@ -37,7 +37,11 @@ import com.example.littlelemon.viewmodels.checkout.CheckoutViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewModel) {
+fun CheckOutReviewPage(
+    navController: NavController,
+    viewModel: CheckoutViewModel,
+    onCheckoutSuccess:()->Unit
+) {
     val checkoutUIState = viewModel.uiState.collectAsState().value
     val context = LocalContext.current
     Scaffold(
@@ -51,12 +55,7 @@ fun CheckOutReviewPage(navController: NavController, viewModel: CheckoutViewMode
         bottomBar = {
             ActionButton(
                 onClick = {
-                    Toast.makeText(context, "Order Success", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Routes.HOME.name) {
-                        popUpTo(Routes.LOGIN.name) {
-                            inclusive = true
-                        }
-                    }
+                    onCheckoutSuccess()
                 },
                 label = stringResource(R.string.confirm_order)
             )

@@ -110,7 +110,7 @@ fun LittleLemonMainPage(
                                     Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT)
                                         .show()
                                     navController.navigate(Routes.HOME.name) {
-                                        popUpTo(Routes.REGISTER.name) {
+                                        popUpTo(Routes.HOME.name) {
                                             inclusive = true
                                         }
                                     }
@@ -118,7 +118,7 @@ fun LittleLemonMainPage(
                             }
                         }, onNavigateToLogin = {
                             navController.navigate(Routes.LOGIN.name) {
-                                popUpTo(Routes.REGISTER.name) {
+                                popUpTo(Routes.LOGIN.name) {
                                     inclusive = true
                                 }
                             }
@@ -141,7 +141,7 @@ fun LittleLemonMainPage(
                                     Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT)
                                         .show()
                                     navController.navigate(Routes.HOME.name) {
-                                        popUpTo(Routes.LOGIN.name) {
+                                        popUpTo(Routes.HOME.name) {
                                             inclusive = true
                                         }
                                     }
@@ -150,7 +150,7 @@ fun LittleLemonMainPage(
                         },
                         onNavigateToRegister = {
                             navController.navigate(Routes.REGISTER.name) {
-                                popUpTo(Routes.LOGIN.name) {
+                                popUpTo(Routes.REGISTER.name) {
                                     inclusive = true
                                 }
                             }
@@ -280,7 +280,18 @@ fun LittleLemonMainPage(
                     SelectPaymentPage(navController = navController, viewModel = checkoutViewModel)
                 }
                 composable(Routes.CHECKOUT_REVIEW.name) {
-                    CheckOutReviewPage(navController = navController, viewModel = checkoutViewModel)
+                    CheckOutReviewPage(
+                        navController = navController,
+                        viewModel = checkoutViewModel,
+                        onCheckoutSuccess = {
+                            Toast.makeText(context, "Order Success", Toast.LENGTH_SHORT).show()
+                            navController.navigate(Routes.HOME.name) {
+                                popUpTo(Routes.HOME.name) {
+                                    inclusive = true
+                                }
+                            }
+                        }
+                    )
                 }
                 composable(Routes.EDIT_PROFILE.name) {
                     EditProfilePage(

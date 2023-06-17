@@ -67,7 +67,8 @@ fun HomeContent(
             HomeHero(
                 onSearch = {
                     onSearchClicked(menuItems)
-                }
+                },
+                label = stringResource(R.string.search_menu)
             )
             OrderForDelivery(
                 categories = categories,
@@ -88,7 +89,7 @@ fun HomeContent(
 }
 
 @Composable
-fun HomeHero(onSearch: () -> Unit) {
+fun HomeHero(onSearch: () -> Unit,label: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -137,12 +138,12 @@ fun HomeHero(onSearch: () -> Unit) {
 
             )
         }
-        SearchBoxOnHero(onSearch = onSearch)
+        SearchBoxOnHero(onSearch = onSearch,label)
     }
 }
 
 @Composable
-fun SearchBoxOnHero(onSearch: () -> Unit) {
+fun SearchBoxOnHero(onSearch: () -> Unit,label: String) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -162,7 +163,7 @@ fun SearchBoxOnHero(onSearch: () -> Unit) {
                 modifier = Modifier.padding(horizontal = 5.dp)
             )
             Text(
-                text = stringResource(R.string.search_menu),
+                text = label,
                 style = MaterialTheme.typography.bodySmall,
             )
         }
